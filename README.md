@@ -1,4 +1,4 @@
-# Video Caption Generator Deep Learning 
+# Deep Learning Based Video Caption Generator (배너 삽입)
 
 # 딥러닝 기반 동영상 캡션 자동 생성
 ## 한국어 데이터 기반 동영상 캡션 자동 생성 모델 개발
