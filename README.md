@@ -57,9 +57,16 @@
 
 ![image](https://user-images.githubusercontent.com/38115693/153374270-bd4a856b-c069-4945-aa8f-b1055d45bb3a.png)
 
+![image](https://user-images.githubusercontent.com/38115693/153402537-3e441fb8-6f19-40e0-b72a-210d2acfa0a5.png)
+
 
 CNN-LSTM
 The main approach to this image captioning is in three parts: 1. to use a pre-trained object-recognition network to get features from images and 2. to map these extracted feature embeddings to text sequences, then lastly 3. to use the long-short term memory (LSTM) to predict the word that follows a sequence given the map of features and text sequence.
+
+we need a language RNN model as we want to generate a word sequence, so, when should we introduce the image data vectors in the language model?
+
+Merging architecture. FF shows feed-forward networks.
+In the Merging Architecture, the image and the language information are encoded separately and introduced together in a feed-forward network, creating a multimodal layer architecture.
 
 ## 
 
@@ -101,8 +108,8 @@ cross validation도 진행하여 overfitting을 확인했다. 그리고 validati
 - 더 많은 데이터를 사용하여 학습한다면, 캡션 예측/생성 성능이 더 좋아질 것으로 생각되기 때문에, 데이터를 더 확보하여 시도
 	- AI허브 MSCOCO와 멀티모달 두 데이터를 합쳐 모델 학습을 진행해 보는 것도 고려
 - AI허브 멀티모달 영상 데이터에 대해 pre-trained CNN 모델이 아닌, 기본 CNN 모델을 사용하여 학습 및 특성 추출
-- 모델 아키텍쳐를 변경 (e.g. Attention 메커니즘 기법 적용)
-- more 하이퍼파라미터 튜닝 (e.g. learning rate, batch size, number of layers, number of units, dropout rate, batch normalization 등 조정)
+- 모델 아키텍쳐를 변경 (e.g. Bidirectional RNNs/LSTMs 사용, Attention 메커니즘 기법 사용, Injecting methodology 사용)
+- more 하이퍼파라미터 튜닝 (e.g. learning rate, batch size, embedding dimension 300, number of layers, number of units, dropout rate, batch normalization 등 조정)
 - 영상을 표현하는 시각 특징 외에, 정적 그리고 동적 의미 특징들도 이용
 
 **출력된 캡션에 대한 추가적인 처리**
