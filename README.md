@@ -32,8 +32,8 @@
 
 ---
 ## 프로젝트 기간
-
-(타임테이블)
+																			
+![image](https://user-images.githubusercontent.com/38115693/153357204-141d413e-abaa-4950-8e09-7aa115289926.png)
 
 ---
 
