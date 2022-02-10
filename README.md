@@ -55,7 +55,11 @@
 
 이미지 캡션
 
+![image](https://user-images.githubusercontent.com/38115693/153374270-bd4a856b-c069-4945-aa8f-b1055d45bb3a.png)
 
+
+CNN-LSTM
+The main approach to this image captioning is in three parts: 1. to use a pre-trained object-recognition network to get features from images and 2. to map these extracted feature embeddings to text sequences, then lastly 3. to use the long-short term memory (LSTM) to predict the word that follows a sequence given the map of features and text sequence.
 
 ## 
 
