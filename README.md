@@ -38,7 +38,7 @@
 ---
 구체적인 설명(모델 구조, 학습 원리, 캡션 생성 원리, 평가 방법, 데이터 소개, 데이터 정리/전처리, 모델링 등)
 
-## 데이터 소개
+## 데이터
 
 ![image](https://user-images.githubusercontent.com/38115693/153358951-a01619cf-5801-42df-aab8-880ac0e4f9ca.png)
 
@@ -134,24 +134,23 @@ This involves passing in the start description token ‘startseq‘, generating 
 The function below named generate_desc() implements this behavior and generates a textual description given a trained model, and a given prepared photo as input. It calls the function word_for_id() in order to map an integer prediction back to a word.
 
 ---
-## 과정
+## 모델링 과정
 
 proceeded with the following steps.
 
-1. Using pretrained CNN to extract image features. A pretrained VGG16 CNN will be used to extract image features which will be concatenated with the RNN output
-2. Prepare training data. The training captions will be tokenized and embedded using the GLOVE word embeddings. The embeddings will be fed into the RNN.
+1. Using pretrained CNN to extract image features. A pretrained InceptionV3 CNN will be used to extract image features which will be merged with the RNN output
+2. Prepare training data. The training captions will be tokenized and embedded using the GLOVE/FastText word embeddings. The embeddings will be fed into the RNN.
 3. Model definition
 4. Training the model
 5. Generating novel image captions using the trained model. Test images and images from the internet will be used as input to the trained model to generate captions. The captions will be examined to determine the weaknesses of the model and suggest improvements.
 6. Beam search. We will use beam search to generate better captions using the model.
 7. Model evaluation. The model will be evaluated using the BLEU and ROUGE metric.
 
-## 모델링
+## 모델링 세부 과정
 
 Trial 1
 Trial 2
 ...
-
 마지막 trial에 대해,
 그리고 틀린, 동일한 캡션을 출력하는 구간이 있어.. (이런 식으로)
 cross validation도 진행하여 overfitting을 확인했다. 그리고 validation loss가 더 이상 낮아지지 않는 지점의 모델을 최종 모델로 선택
@@ -188,7 +187,7 @@ cross validation도 진행하여 overfitting을 확인했다. 그리고 validati
 **모델의 캡션 예측/생성 성능 향상을 위한 시도**
 - 더 많은 데이터를 사용하여 학습한다면, 캡션 예측/생성 성능이 더 좋아질 것으로 생각되기 때문에, 데이터를 더 확보하여 시도
 	- AI허브 MSCOCO와 멀티모달 두 데이터를 합쳐 모델 학습을 진행해 보는 것도 고려
-- AI허브 멀티모달 영상 데이터에 대해 pre-trained CNN 모델이 아닌, 기본 CNN 모델을 사용하여 학습 및 특성 추출
+- AI허브 멀티모달 영상 데이터에 대해 pre-trained CNN 모델로 transfer learning시 fine tuning을 더 시도하거나(trainable layer을 증가?), 자체 CNN 모델을 설계하여 처음부터 학습하여 특성 추출
 - 모델 아키텍쳐를 변경 (e.g. Bidirectional RNNs/LSTMs 사용, Attention 메커니즘 기법 사용, Injecting methodology 사용)
 - more 하이퍼파라미터 튜닝 (e.g. learning rate, batch size, embedding dimension 300, number of layers, number of units, dropout rate, batch normalization 등 조정)
 - 영상을 표현하는 시각 특징 외에, 정적 그리고 동적 의미 특징들도 이용
