@@ -55,9 +55,9 @@
 
 이미지 캡션
 
-![image](https://user-images.githubusercontent.com/38115693/153374270-bd4a856b-c069-4945-aa8f-b1055d45bb3a.png)
+![image](https://user-images.githubusercontent.com/38115693/153629089-db64f778-ce06-4585-a6ed-0584a0d8179e.png)
 
-![image](https://user-images.githubusercontent.com/38115693/153402537-3e441fb8-6f19-40e0-b72a-210d2acfa0a5.png)
+![image](https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png)
 
 
 CNN-LSTM
@@ -68,10 +68,34 @@ we need a language RNN model as we want to generate a word sequence, so, when sh
 Merging architecture. FF shows feed-forward networks.
 In the Merging Architecture, the image and the language information are encoded separately and introduced together in a feed-forward network, creating a multimodal layer architecture.
 
-## 
+three parts:
 
+Photo Feature Extractor. This is a 16-layer VGG model pre-trained on the ImageNet dataset. We have pre-processed the photos with the VGG model (without the output layer) and will use the extracted features predicted by this model as input.
+Sequence Processor. This is a word embedding layer for handling the text input, followed by a Long Short-Term Memory (LSTM) recurrent neural network layer.
+Decoder (for lack of a better name). Both the feature extractor and sequence processor output a fixed-length vector. These are merged together and processed by a Dense layer to make a final prediction.
+The Photo Feature Extractor model expects input photo features to be a vector of 4,096 elements. These are processed by a Dense layer to produce a 256 element representation of the photo.
 
-마지막 trail에 대해,
+The Sequence Processor model expects input sequences with a pre-defined length (34 words) which are fed into an Embedding layer that uses a mask to ignore padded values. This is followed by an LSTM layer with 256 memory units.
+
+Both the input models produce a 256 element vector. Further, both input models use regularization in the form of 50% dropout. This is to reduce overfitting the training dataset, as this model configuration learns very fast.
+
+The Decoder model merges the vectors from both input models using an addition operation. This is then fed to a Dense 256 neuron layer and then to a final output Dense layer that makes a softmax prediction over the entire output vocabulary for the next word in the sequence.
+
+## 과정
+
+proceeded with the following steps.
+
+1. Using pretrained CNN to extract image features. A pretrained VGG16 CNN will be used to extract image features which will be concatenated with the RNN output
+2. Prepare training data. The training captions will be tokenized and embedded using the GLOVE word embeddings. The embeddings will be fed into the RNN.
+3. Model definition
+4. Training the model
+5. Generating novel image captions using the trained model. Test images and images from the internet will be used as input to the trained model to generate captions. The captions will be examined to determine the weaknesses of the model and suggest improvements.
+6. Beam search. We will use beam search to generate better captions using the model.
+7. Model evaluation. The model will be evaluated using the BLEU and ROUGE metric.
+
+## 모델링
+
+마지막 trial에 대해,
 그리고 틀린, 동일한 캡션을 출력하는 구간이 있어.. (이런 식으로)
 cross validation도 진행하여 overfitting을 확인했다. 그리고 validation loss가 더 이상 낮아지지 않는 지점의 모델을 최종 모델로 선택
 
