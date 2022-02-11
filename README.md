@@ -52,23 +52,58 @@
 	- 전체 이미지와 한국어 묘사 텍스트 데이터를 사용했습니다.
 
 ## 모델 구조
+---
+Video Captioning Model
 
-이미지 캡션
+비디오 캡션 알고리즘 구조/과정 보여주기
+
+---
+Image Caption Generator Model
+
+Used an Encoder-Decoder model
+encoder model combines both the encoded form of the image and the encoded form of the text caption and feed to the decoder
+model will treat CNN as the ‘image model’ and the RNN/LSTM as the ‘language model’ to encode the text sequences of varying length. The vectors resulting from both the encodings are then merged and processed by a Dense layer to make a final prediction.
+
+create a merge architecture in order to keep the image out of the RNN/LSTM and thus be able to train the part of the neural network that handles images and the part that handles language separately, using images and sentences from separate training sets. 
+
+In the merge model, a different representation of the image can be combined with the final RNN state before each prediction.
+
+The merging of image features with text encodings to a later stage in the architecture is advantageous and can generate better quality captions with smaller layers than the traditional inject architecture (CNN as encoder and RNN as a decoder).
+
+To encode our image features we will make use of transfer learning. There are a lot of models that we can use like VGG-16, InceptionV3, ResNet, etc.
+We will make use of the inceptionV3 model which has the least number of training parameters in comparison to the others and also outperforms them.
+
+To encode our text sequence we will map every word to a 200-dimensional vector. For this will use a pre-trained Glove model. This mapping will be done in a separate layer after the input layer called the embedding layer.
+
+To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
+
+---
+
+이미지 캡션 생성 모델은 based on the “merge-model” described by Marc Tanti, et al. in their 2017 papers 이다. Several studies have also proven that merging architectures works better than injecting architectures for some cases.
 
 ![image](https://user-images.githubusercontent.com/38115693/153629089-db64f778-ce06-4585-a6ed-0584a0d8179e.png)
+
+The merge model combines both the encoded form of the image input with the encoded form of the text description generated so far.
+
+The combination of these two encoded inputs is then used by a very simple decoder model to generate the next word in the sequence.
+
+The approach uses the recurrent neural network only to encode the text generated so far.
+
+In the case of ‘merge’ architectures, the image is left out of the RNN subnetwork, such that the RNN handles only the caption prefix, that is, handles only purely linguistic information. After the prefix has been vectorised, the image vector is then merged with the prefix vector in a separate ‘multimodal layer’ which comes after the RNN subnetwork
+
+— Where to put the Image in an Image Caption Generator, 2017.
+
 
 ![image](https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png)
 
 
-CNN-LSTM
-The main approach to this image captioning is in three parts: 1. to use a pre-trained object-recognition network to get features from images and 2. to map these extracted feature embeddings to text sequences, then lastly 3. to use the long-short term memory (LSTM) to predict the word that follows a sequence given the map of features and text sequence.
-
 we need a language RNN model as we want to generate a word sequence, so, when should we introduce the image data vectors in the language model?
 
-Merging architecture. FF shows feed-forward networks.
+Merging architecture - FF feed-forward networks.
 In the Merging Architecture, the image and the language information are encoded separately and introduced together in a feed-forward network, creating a multimodal layer architecture.
 
-three parts:
+CNN-LSTM
+The main approach to this image captioning is in three parts:
 
 Photo Feature Extractor. This is a 16-layer VGG model pre-trained on the ImageNet dataset. We have pre-processed the photos with the VGG model (without the output layer) and will use the extracted features predicted by this model as input.
 Sequence Processor. This is a word embedding layer for handling the text input, followed by a Long Short-Term Memory (LSTM) recurrent neural network layer.
@@ -81,6 +116,24 @@ Both the input models produce a 256 element vector. Further, both input models u
 
 The Decoder model merges the vectors from both input models using an addition operation. This is then fed to a Dense 256 neuron layer and then to a final output Dense layer that makes a softmax prediction over the entire output vocabulary for the next word in the sequence.
 
+---
+when the model is used to generate descriptions, the generated words will be concatenated and recursively provided as input to generate a caption for an image.
+
+The function below named create_sequences(), given the tokenizer, a maximum sequence length, and the dictionary of all descriptions and photos, will transform the data into input-output pairs of data for training the model. There are two input arrays to the model: one for photo features and one for the encoded text. There is one output for the model which is the encoded next word in the text sequence.
+
+The input text is encoded as integers, which will be fed to a word embedding layer. The photo features will be fed directly to another part of the model. The model will output a prediction, which will be a probability distribution over all words in the vocabulary.
+
+---
+
+캡션 생성
+
+we need to be able to generate a description for a photo using a trained model.
+
+This involves passing in the start description token ‘startseq‘, generating one word, then calling the model recursively with generated words as input until the end of sequence token is reached ‘endseq‘ or the maximum description length is reached.
+
+The function below named generate_desc() implements this behavior and generates a textual description given a trained model, and a given prepared photo as input. It calls the function word_for_id() in order to map an integer prediction back to a word.
+
+---
 ## 과정
 
 proceeded with the following steps.
@@ -94,6 +147,10 @@ proceeded with the following steps.
 7. Model evaluation. The model will be evaluated using the BLEU and ROUGE metric.
 
 ## 모델링
+
+Trial 1
+Trial 2
+...
 
 마지막 trial에 대해,
 그리고 틀린, 동일한 캡션을 출력하는 구간이 있어.. (이런 식으로)
