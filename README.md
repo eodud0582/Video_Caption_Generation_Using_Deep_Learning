@@ -61,6 +61,7 @@
 ### 동영상 캡셔닝 모델
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153815473-2fff29db-1349-4cae-8f2e-092341d32f2e.png" width="600"></div>
+<div align=center> Video Captioning Model </div>
 
 **동영상 캡셔닝 알고리즘**
 - 입력받은 동영상을 여러 **프레임**으로 나누고, **이미지 캡션 생성 모델**을 통해 각 프레임 이미지에 대한 캡션을 생성합니다.
@@ -86,8 +87,8 @@
 	- Merge architecture에서는 **이미지와 언어/텍스트 정보가 별도로 인코딩** 되며, 이후 **multimodal layer** architecture의 Feedforward Network(FF)에서 병합(merge)되어 함께 처리됩니다.
 	- CNN을 encoder로, RNN을 decoder로 사용한 기존의 Inject architecture와 비교하여, Merge 모델은 RNN을 텍스트 데이터에 대해서만 인코딩하고 해석하는 데 온전히 사용 할 수 있으며, 인코딩에 GloVe, FastText와 같은 pre-trained language model을 사용 할 수 있다는 장점이 있습니다. 또한, Merge 모델이 더 작은 layers로 더 나은 캡셔닝 성능을 보인다 알려져 있습니다.
 
+**CNN(Convolutional Neural Networks) + LSTM(Long Short-Term Memory)**
 
-**CNN-LSTM**
 <br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png" width="500"></div>
 <div align=center> RNN as Language Model </div>
@@ -99,43 +100,51 @@
 - **Decoder 모델**
 	- Decoder 모델은 각각 따로 처리된 이미지와 텍스트 **두 입력 모델의 인코딩 결과/벡터를 병합**하고 Dense layer을 통해 **시퀀스의 '다음 단어'를 생성**합니다.
 	- Dense layer는 softmax에 의해 **모든 단어에 대한 확률분포**를 구하여 시퀀스의 다음 단어를 생성하게 됩니다.
-
 <br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153908121-a0cb87fc-0517-4551-8721-cc7c0bbe72dd.png" width="1000"></div>
 
-### 캡션 생성
+---
+## 캡션 생성
 
-**캡션 생성 과정**
+**학습한 모델을 사용한 캡션 생성 과정**
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153921982-d1373341-5fba-444a-87a2-d801ee68e28a.png" width="600"></div>
+<div align=center> Caption Generation Process </div>
 <br>
 
-- 학습된 모델을 사용하여 이미지에 대한 캡션을 생성할 때에, 시퀀스의 다음 단어를 예측해 가는 원리로 캡션을 생성합니다. 다음 단어를 예측 또는 선택할 때엔 모든 단어에 대한 확률분포를 구하여 예측을 힙니다.
+- 학습한 모델을 사용하여 이미지에 대한 캡션을 생성하는 것은 시퀀스의 다음 단어를 예측해 가는(단어들의 연속을 예측하는) 원리입니다. 다음 단어에 대한 예측과 선택은 **모든 단어에 대한 확률분포**를 구하여 예측 힙니다. 즉, 단어들의 후보 시퀀스들은 그들의 **우도(likelihood)**에 따라 점수화 되어 선택 됩니다.
 - 이미지를 입력으로 받으면, 시퀀스의 시작을 의미하는 토큰인 'startseq'를 전달하여 단어 하나를 생성한 다음, 다시 모델을 호출하고 생성된 단어까지를 연결하여/합쳐서 input으로 넘겨 그 다음 단어를 생성하게 됩니다.
-- 이렇게 다음 단어를 생성하고, 지금까지 생덩된 단어들을 다시 모델에 input으로 넘기고, 또 다음 단어를 생성하는 과정을 재귀적으로 반복합니다. 그러다 아래 조건에 도달하게 되면 반복을 종료하고, 최종적으로 이미지에 대한 캡션이 만들어지게 됩니다.
-	- (1) 시퀀스의 끝을 의미하는 토큰인 'endseq'가 생성되거나,
-	- (2) 최대 캡션 길이에 도달할 때까지 반복
-- 캡션 생성 
+- 이렇게 **다음 단어를 생성하고, 지금까지 생덩된 단어들을 다시 모델에 input으로 넘기고, 또 다음 단어를 생성**하는 과정을 재귀적으로 반복합니다. 그러다 아래 조건에 도달하게 되면 반복을 종료하고, 최종적으로 이미지에 대한 캡션이 만들어지게 됩니다.
+	- (1) **시퀀스의 끝을 의미하는 토큰인 'endseq'가 생성**되거나,
+	- (2) **최대 캡션 길이에 도달**할 때까지 반복합니다.
+- 다음 단어를 예측하는 건 일반적으로 사용되는 Greedy Search와 Beam Search 두 기법을 사용했습니다.
 
 **Greedy Search**
-
+- Greedy search는 다음 단어를 예측하는데 **각 스텝에서 가장 가능성이/확률이 높은 단어를 선택**합니다. 전체 vocab에서 각 단어에 대한 확률 분포를 예측하여 선택합니다.
+- 빠른 속도로 탐색 및 예측 과정이 완료되나, 하나의 예측만을 고려하기 때문에 minor한 변화에 영향을 받을 수 있어 최적의 예측을 하지 못활 위험이 있습니다. 쉽게 말해, 한 번이라도 잘못된 단어를 예측하게 되면 뒤이어 다 잘못된 예측이 될 수도 있다는 뜻입니다.
 
 **Beam Search**
-
-The final output Dense layer makes a softmax prediction, which will be a probability distribution over all words in the vocabulary, for the next word in the sequence.
-
-When the model is used to generate descriptions, the generated words will be concatenated and recursively provided as input to generate a caption for an image.
-
-We need to be able to generate a description for a photo using a trained model.
-
-This involves passing in the start description token ‘startseq‘, generating one word, then calling the model recursively with generated words as input until the end of sequence token is reached ‘endseq‘ or the maximum description length is reached.
-
-The function below named generate_desc() implements this behavior and generates a textual description given a trained model, and a given prepared photo as input. It calls the function word_for_id() in order to map an integer prediction back to a word.
-
-To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
+- Greedy Search의 단점을 보완하여 확장한 기법이 Beam Search 입니다.
+- Beam Search에선 각 후보 시퀀스가 모든 가능한 다음 스텝들로 확장됩니다. 쉽게 말해, **가능한 모든 다음 단어/시퀀스를 예측** 합니다. 그렇게 예측된 각 후보는 확률을 곱하여 점수가 매겨지고, **가장 확률이 높은 k개(beam size) 시퀀스가 선택**되며, 다른 모든 후보들은 제거됩니다. 이 과정을 시퀀스가 끝날때까지 반복합니다.
+	- 예를 들어, 만약 지정한 beam size가 2라면, 각 step에서 가장 확률 높은 2개를 선택합니다.
+- Greedy Search의 경우는 beam size가 1인 것과 같다고 보면 됩니다. 
+- Beam의 수는 일반적으로 5 또는 10을 사용하고, beam size가 클수록 타겟 시퀀스가 맞을 확률이 높지만 디코딩 속도가 떨어지게 됩니다.
 
 ---
-### 모델 평가
+## 모델 평가
+
+**BLEU(Bilingual Evaluation Understudy) Score**
+
+- 캡션 생성 평가 지표로는 기존의 이미지 캡션 논문들에서 사용되는 BLEU 스코어(BLEU-1, BLEU-2, BLEU-3, BLEU-4)를 사용하였습니다.
+- BLEU 스코어는 기계번역의 결과와 사람이 직접 번역한 결과가 얼마나 유사한지 비교하여 번역에 대한 성능을 측정하는 평가 지표로, 데이터의 X가 순서정보를 가진 단어들(문장)로 이루어져 있고, y 또한 단어들의 시리즈(문장)로 이루어진 경우에 사용됩니다.
+- 3가지 요소:
+	- n-gram을 통한 순서쌍들이 얼마나 겹치는지 측정(precision)
+	- 문장길이에 대한 과적합 보정(Brevity Penalty)
+	- 같은 단어가 연속적으로 나올때 과적합 되는 것을 보정(Clipping)
+- 측정 기준은 n-gram에 기반하는데, 예측 문장과 정답 문장의 n-gram들이 서로 얼마나 겹치는지 비교하여 정확도를 측정하기 때문에 이미지 캡션 평가에서도 보편적으로 사용됩니다.
+	- 점수를 매길 최대 길이를 n-gram 길이라고 할 때, n-gram이라고 하는 연속된 n개의 단어를 기준으로 실제 캡션(ground truth)과 얼마나 공통적인 단어가 나왔는지/겹치는지를 판단해서 BLEU 점수를 계산합니다.
+	- k를 n-gram이라고 할 때, 만약 k=4라면, 길이가 4이하인 n-gram에 대해서만 고려하게 되며, 더 큰 길이의 n-gram은 무시합니다.
+	- 보통 1~4의 크기의 n-gram을 측정 지표로 사용합니다.
 
 ---
 ## 모델링 과정
