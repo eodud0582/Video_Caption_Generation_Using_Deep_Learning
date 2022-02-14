@@ -11,8 +11,10 @@
 ---
 ## 프로젝트 결과
 
-![captioned_office](https://user-images.githubusercontent.com/38115693/153170767-f47adbe6-db3f-4bae-abc0-58c47bdac226.gif)![captioned_people_walking](https://user-images.githubusercontent.com/38115693/153171395-11b209c1-f0b5-4075-8c43-759b69a278a5.gif)
+<div align=center> 
 
+![captioned_office](https://user-images.githubusercontent.com/38115693/153170767-f47adbe6-db3f-4bae-abc0-58c47bdac226.gif)![captioned_people_walking](https://user-images.githubusercontent.com/38115693/153171395-11b209c1-f0b5-4075-8c43-759b69a278a5.gif)
+	
 ![captioned_cats](https://user-images.githubusercontent.com/38115693/153171356-24403b58-fa3c-482b-b9c7-b558b45ca465.gif)![captioned_black_cat](https://user-images.githubusercontent.com/38115693/153180977-65572efb-2083-4981-a3ed-12c9ebbbbb00.gif)
 
 ![captioned_seoul_night_city](https://user-images.githubusercontent.com/38115693/153171118-a93533c4-4e47-408a-ba8d-50f0597c0adb.gif)![captioned_seoul_road_street](https://user-images.githubusercontent.com/38115693/153171144-62f41be7-4bad-45bd-a2c7-0b786e4661a1.gif)
@@ -20,6 +22,8 @@
 ![captioned_KETI_MULTIMODAL_0000000695](https://user-images.githubusercontent.com/38115693/153171433-5aca8f3d-5832-4004-a7db-b63d7bc3a371.gif)![captioned_KETI_MULTIMODAL_0000000215](https://user-images.githubusercontent.com/38115693/153171459-394a5fcc-deba-45e5-845a-aa05a327a0e9.gif)
 
 <img src="https://user-images.githubusercontent.com/38115693/153171626-08746848-62f4-479c-960c-18478380bf33.gif" width="256"><img src="https://user-images.githubusercontent.com/38115693/153171646-18e6adac-ed1f-4f6f-9bf2-1a8a1d045300.gif" width="256"><img src="https://user-images.githubusercontent.com/38115693/153171658-c2d88d7b-4d85-4cde-a52d-425a7b948c36.gif" width="256">
+
+</div>
 
 ---
 ## 프로젝트 기간
@@ -66,42 +70,42 @@
 - 이미지 캡셔닝 딥러닝 모델은 **Encoder-Decoder** architecture를 기반으로 만들었습니다.
 	- Encoder: 이미지와 텍스트를 읽어 고정된 길이의 벡터로 인코딩하는 network model
 	- Decoder: 인코딩된 이미지와 텍스트를 이용해 텍스트 설명을 생성하는 network model
-- Encoder-Decoder architecture 구현을 위해 'merge' 모델을 사용하였습니다. (described by Marc Tanti, et al. in their 2017 papers)
+- 그리고 Encoder-Decoder architecture 구현을 위해 **Merge** 모델을 사용하였습니다. (described by Marc Tanti, et al. in their 2017 papers)
 
 ![image](https://user-images.githubusercontent.com/38115693/153812190-f106a7e1-416e-45ff-80fd-16dcf1262722.png)
-Merge Architecture for Encoder-Decoder Model in Caption Generation
+<div align=center> Merge Architecture for Encoder-Decoder Model in Caption Generation </div>
 
-'Merge' 모델에서는 이미지와 언어 정보가 별도로 인코딩 되며, 이후 multimodal layer architecture의 Feedforward Network에서 함께 처리됩니다.
-- To encode our image features we will make use of transfer learning. There are a lot of models that we can use like VGG-16, InceptionV3, ResNet, etc.
-We will make use of the inceptionV3 model which has the least number of training parameters in comparison to the others and also outperforms them.
-- To encode our text sequence we will map every word to a 200-dimensional vector. For this will use a pre-trained Glove model. This mapping will be done in a separate layer after the input layer called the embedding layer.
+- Merge architecture에서는 이미지와 언어 정보가 별도로 인코딩 되며, 이후 multimodal layer architecture의 Feedforward Network(FF)에서 병합(merge)되어 함께 처리됩니다.
 
 
-To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
-
-
-merge architecture
-- to keep the image out of the RNN/LSTM and thus be able to train the part of the neural network that handles images and the part that handles language separately, using images and sentences from separate training sets.
-- a different representation of the image can be combined with the final RNN state before each prediction.
+- 모델에서 CNN을 이미지 인코딩을 위한 '이미지 모델'로, RNN/LSTM을 text sequence를 인코딩하는 '언어 모델'로 사용하였습니다. (CNN-LSTM)
+	- 이미지 특성 추출 및 인코딩을 위해 pre-trained model을 사용하였으며, 다른 pre-trained model에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 InceptionV3를 사용해 전이학습 하였습니다.
+	- Text sequence를 인코딩하기 위해 pre-trained model인 FastText를 사용하여 모든 단어를 200차원으로 매핑하였으며, 
 
 Merge Architecture 장점:
 - The merging of image features with text encodings to a later stage in the architecture is advantageous and can generate better quality captions with smaller layers than the traditional inject architecture (CNN as encoder and RNN as a decoder).
 - Several studies have also proven that merging architectures works better than injecting architectures for some cases.
 
-Used an Encoder-Decoder model
-- encoder model combines both the encoded form of the image and the encoded form of the text caption. The combination of these two encoded inputs is then used by a very simple decoder model to generate the next word in the sequence.
-- model will treat CNN as the ‘image model’ and the RNN/LSTM as the ‘language model’ to encode the text sequences of varying length. The vectors resulting from both the encodings are then merged and processed by a Dense layer to make a final prediction.
-
+---
 - To encode our image features we will make use of transfer learning. There are a lot of models that we can use like VGG-16, InceptionV3, ResNet, etc.
 We will make use of the inceptionV3 model which has the least number of training parameters in comparison to the others and also outperforms them.
 - To encode our text sequence we will map every word to a 200-dimensional vector. For this will use a pre-trained Glove model. This mapping will be done in a separate layer after the input layer called the embedding layer.
-- To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
 
----
+To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
+
+
+Used an Encoder-Decoder model
+- encoder model merges both the encoded form of the image and the encoded form of the text caption. The combination of these two encoded inputs is then used by a very simple decoder model to generate the next word in the sequence.
+- model will treat CNN as the ‘image model’ and the RNN/LSTM as the ‘language model’ to encode the text sequences of varying length. The vectors resulting from both the encodings are then merged and processed by a Dense layer to make a final prediction.
+
 
 - The merge model combines both the encoded form of the image input with the encoded form of the text description generated so far.
 The combination of these two encoded inputs is then used by a very simple decoder model to generate the next word in the sequence.
 The approach uses the recurrent neural network only to encode the text generated so far.
+
+
+
+
 
 "In the case of ‘merge’ architectures, the image is left out of the RNN subnetwork, such that the RNN handles only the caption prefix, that is, handles only purely linguistic information. After the prefix has been vectorised, the image vector is then merged with the prefix vector in a separate ‘multimodal layer’ which comes after the RNN subnetwork"
 — Where to put the Image in an Image Caption Generator, 2017.
@@ -110,8 +114,6 @@ The approach uses the recurrent neural network only to encode the text generated
 ![image](https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png)
 RNN as Language Model
 
-
-In the Merging Architecture, the image and the language information are encoded separately and introduced together in a feed-forward network, creating a multimodal layer architecture.
 
 CNN-LSTM
 
@@ -131,7 +133,9 @@ when the model is used to generate descriptions, the generated words will be con
 
 The function below named create_sequences(), given the tokenizer, a maximum sequence length, and the dictionary of all descriptions and photos, will transform the data into input-output pairs of data for training the model. There are two input arrays to the model: one for photo features and one for the encoded text. There is one output for the model which is the encoded next word in the text sequence.
 
-The input text is encoded as integers, which will be fed to a word embedding layer. The photo features will be fed directly to another part of the model. The model will output a prediction, which will be a probability distribution over all words in the vocabulary.
+The input text is encoded as integers, which will be fed to a word embedding layer.
+The photo features will be fed directly to another part of the model.
+The model will output a prediction, which will be a probability distribution over all words in the vocabulary.
 
 ---
 
