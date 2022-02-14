@@ -71,11 +71,12 @@
 <div align=center> Merge Architecture for Encoder-Decoder Model in Caption Generation </div>
 <br>
 
-- 이미지 캡셔닝 딥러닝 모델은 **Encoder-Decoder** architecture를 기반으로 만들었습니다.
+- **Encoder-Decoder** architecture 기반
 	- Encoder: 이미지와 텍스트를 읽어 고정된 길이의 벡터로 인코딩하는 network model
 	- Decoder: 인코딩된 이미지와 텍스트를 이용해 텍스트 설명을 생성하는 network model
-- 그리고 Encoder-Decoder architecture 구현을 위해 Marc Tanti, et al.(2017)가 제시한 **Merge** 모델을 사용하였습니다. Merge architecture에서는 **이미지와 언어 정보가 별도로 인코딩** 되며, 이후 **multimodal layer** architecture의 Feedforward Network(FF)에서 병합(merge)되어 함께 처리됩니다.
-	- CNN을 encoder로, RNN을 decoder로 사용한 기존의 Inject architecture와 비교하여, Merge 모델을 사용하면 텍스트 데이터를 인코딩하고 이해하는 데에만 RNN을 사용 할 수 있고, 인코딩에 pretrained language model을 사용 할 수 있는 등의 장점이 있고, 또한 몇몇 연구에선 Merge 모델이 더 나은 캡션 생성 성능을 보였습니다.
+- Encoder-Decoder architecture 구현을 위해 Marc Tanti, et al. (2017)가 제시한 **Merge** 모델을 사용
+	- Merge architecture에서는 **이미지와 언어/텍스트 정보가 별도로 인코딩** 되며, 이후 **multimodal layer** architecture의 Feedforward Network(FF)에서 병합(merge)되어 함께 처리됩니다.
+	- CNN을 encoder로, RNN을 decoder로 사용한 기존의 Inject architecture와 비교하여, Merge 모델은 RNN을 텍스트 데이터에 대해서만 인코딩하고 해석하는 데 온전히 사용 할 수 있고, 인코딩에 GloVe, FastText와 같은 pretrained language model을 사용 할 수 있는 장점이 있습니다. 또한 Merge 모델이 더 나은 캡션 생성 성능을 보인다고 합니다.
 
 <br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png" width="500"></div>
