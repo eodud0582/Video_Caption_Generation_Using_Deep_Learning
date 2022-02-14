@@ -57,7 +57,7 @@
 ---
 ## 모델 구조
 
-### 동영상 캡셔닝 모델 구조
+### 동영상 캡셔닝 모델
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153815473-2fff29db-1349-4cae-8f2e-092341d32f2e.png" width="600"></div>
 
@@ -69,7 +69,7 @@
 - 동영상의 캡션이 시시각각 변하는 구간들이 있어 캡션을 보는 것에 불편함이 있었습니다. 이에 대해, **이미지 유사도 분석을 통해 비슷한 프레임/장면에서는 동일한 캡션을 출력**하게 만들어 동영상 속 출력된 캡션이 부드럽게 전환되고, 보기 편하게 만들었으며, 캡셔닝 처리에 걸리는 시간도 단축시켰습니다.
 - 이미지 유사도 측정은 **MSE**(Mean Squared Error)와 **SSIM**(Structured Similarity Image Matching)을 사용하였으며, 최종적으로 모델에는 SSIM을 적용하였습니다.
 
-### 이미지 캡셔닝 모델 구조
+### 이미지 캡셔닝 모델
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153812190-f106a7e1-416e-45ff-80fd-16dcf1262722.png" width="500"></div>
 <div align=center> Merge Architecture for Encoder-Decoder Model in Caption Generation </div>
@@ -80,7 +80,7 @@
 - **Encoder-Decoder** architecture 기반
 	- Encoder: 이미지와 텍스트를 읽어 고정된 길이의 벡터로 인코딩하는 network model
 	- Decoder: 인코딩된 이미지와 텍스트를 이용해 텍스트 설명을 생성하는 network model
-- Encoder-Decoder architecture 구현을 위해 Marc Tanti, et al. (2017)가 제시한 **Merge** 모델을 사용
+- Encoder-Decoder architecture 구현을 위해 *Marc Tanti, et al. (2017)*가 제시한 **Merge** 모델을 사용
 	- Merge architecture에서는 **이미지와 언어/텍스트 정보가 별도로 인코딩** 되며, 이후 **multimodal layer** architecture의 Feedforward Network(FF)에서 병합(merge)되어 함께 처리됩니다.
 	- CNN을 encoder로, RNN을 decoder로 사용한 기존의 Inject architecture와 비교하여, Merge 모델은 RNN을 텍스트 데이터에 대해서만 인코딩하고 해석하는 데 온전히 사용 할 수 있으며, 인코딩에 GloVe, FastText와 같은 pre-trained language model을 사용 할 수 있다는 장점이 있습니다. 또한, Merge 모델이 더 작은 layers로 더 나은 캡셔닝 성능을 보인다 알려져 있습니다.
 
@@ -91,33 +91,31 @@
 
 **CNN-LSTM**
 - **CNN**을 이미지 데이터 인코딩을 위한 '**이미지 모델**'로, **RNN/LSTM**을 텍스트 시퀀스 데이터를 인코딩하는 '**언어 모델**'로 사용
-	- 이미지 인코딩을 위해, ImageNet 데이터셋으로 pre-trained 된 CNN 모델을 사용하였는데, 다른 pre-trained 모델에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 Inception V3를 사용하여 전이학습(transfer learning) 하였습니다. 여기서 추출된 이미지 특성들은 캡셔닝 모델의 input으로 사용했습다.
-	- 텍스트 인코딩을 위해, 토큰화한 텍스트 시퀀스를 input으로 받아 pre-trained model인 FastText를 사용하여 embedding layer에서 모든 단어를 200차원 벡터로 매핑했습니다. 뒤이어 RNN layer로 LSTM을 사용했습니다. 
+	- 이미지 인코딩을 위해, ImageNet 데이터셋으로 pre-trained 된 CNN 모델을 사용하는데, 다른 pre-trained 모델에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 **InceptionV3**를 사용하여 전이학습(transfer learning) 합니다. 여기서 추출된 이미지 특성들은 캡셔닝 모델의 input으로 사용됩니다.
+	- 텍스트 인코딩을 위해, 토큰화한 텍스트 시퀀스를 input으로 받고, pre-trained model인 **FastText**를 사용하여 embedding layer에서 모든 단어를 200차원 벡터로 매핑합니다. 뒤이어 RNN layer로 **LSTM**을 사용합니다. 
 - **Decoder 모델**
-	- Decoder 모델은 각각 따로 처리된 이미지와 텍스트 두 입력 모델의 인코딩 결과/벡터를 병합하고 Dense layer을 통해 시퀀스의 다음 단어를 예측하여 캡션을 생성하게 됩니다.
-	- 모델은 다음 단어에 대한 예측을 진행
+	- Decoder 모델은 각각 따로 처리된 이미지와 텍스트 **두 입력 모델의 인코딩 결과/벡터를 병합**하고 Dense layer을 통해 캡션을 예측하게 됩니다.
+	- Dense layer는 softmax에 의해 **모든 단어에 대한 확률분포**를 구하여 **시퀀스의 다음 단어를 예측**합니다.
 
+<br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153900448-f7693055-2332-4610-90a7-8ded9a0d762f.png" width="1000"></div>
 
-**캡션 생성**
+### 캡션 생성
 
-- The Decoder model merges the vectors from both input models using an addition operation. This is then fed to a Dense 256 neuron layer and then to a final output Dense layer that makes a softmax prediction over the entire output vocabulary for the next word in the sequence.
+The final output Dense layer makes a softmax prediction, which will be a probability distribution over all words in the vocabulary, for the next word in the sequence.
 
-when the model is used to generate descriptions, the generated words will be concatenated and recursively provided as input to generate a caption for an image.
+When the model is used to generate descriptions, the generated words will be concatenated and recursively provided as input to generate a caption for an image.
 
-The model will output a prediction, which will be a probability distribution over all words in the vocabulary.
-
----
-
-캡션 생성
-
-we need to be able to generate a description for a photo using a trained model.
+We need to be able to generate a description for a photo using a trained model.
 
 This involves passing in the start description token ‘startseq‘, generating one word, then calling the model recursively with generated words as input until the end of sequence token is reached ‘endseq‘ or the maximum description length is reached.
 
 The function below named generate_desc() implements this behavior and generates a textual description given a trained model, and a given prepared photo as input. It calls the function word_for_id() in order to map an integer prediction back to a word.
 
 To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
+
+---
+### 모델 평가
 
 ---
 ## 모델링 과정
