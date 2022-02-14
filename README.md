@@ -102,6 +102,7 @@
 	- Dense layer는 softmax에 의해 **모든 단어에 대한 확률분포**를 구하여 시퀀스의 다음 단어를 생성하게 됩니다.
 <br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153908121-a0cb87fc-0517-4551-8721-cc7c0bbe72dd.png" width="1000"></div>
+<div align=center> Defined Model Structure </div>
 
 ---
 ## 캡션 생성
