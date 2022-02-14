@@ -77,6 +77,13 @@
 
 - Merge architecture에서는 이미지와 언어 정보가 별도로 인코딩 되며, 이후 multimodal layer architecture의 Feedforward Network(FF)에서 병합(merge)되어 함께 처리됩니다.
 
+<div align=center>
+	
+![image](https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png)
+
+</div>
+
+<div align=center> RNN as Language Model </div>
 
 - 모델에서 CNN을 이미지 인코딩을 위한 '이미지 모델'로, RNN/LSTM을 text sequence를 인코딩하는 '언어 모델'로 사용하였습니다. (CNN-LSTM)
 	- 이미지 특성 추출 및 인코딩을 위해 pre-trained model을 사용하였으며, 다른 pre-trained model에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 InceptionV3를 사용해 전이학습 하였습니다.
@@ -111,8 +118,7 @@ The approach uses the recurrent neural network only to encode the text generated
 — Where to put the Image in an Image Caption Generator, 2017.
 
 
-![image](https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png)
-RNN as Language Model
+
 
 
 CNN-LSTM
