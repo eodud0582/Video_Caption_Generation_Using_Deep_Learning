@@ -96,7 +96,7 @@
 
 - **CNN**을 이미지 데이터 인코딩을 위한 '**이미지 모델**'로, **RNN/LSTM**을 텍스트 시퀀스 데이터를 인코딩하는 '**언어 모델**'로 사용
 	- 이미지 인코딩: ImageNet 데이터셋으로 pre-trained 된 CNN 모델을 사용하는데, 다른 pre-trained 모델에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 **InceptionV3**를 사용하여 전이학습(transfer learning) 합니다. 여기서 추출된 이미지 특성들은 캡셔닝 모델의 input으로 사용됩니다.
-	- 텍스트 인코딩: 토큰화 된 integer 형태의 텍스트 시퀀스 데이터를 input으로 받고, pre-trained model인 **FastText**를 사용하여 embedding layer에서 모든 단어를 200차원 벡터로 매핑합니다. 뒤이어 LSTM layer에서 벡터 시퀀스를 처리합니다.
+	- 텍스트 인코딩: 토큰화 된 정수 형태의 텍스트 시퀀스 데이터를 input으로 받고, pre-trained language model인 **FastText**를 사용하여 embedding layer에서 모든 단어를 200차원 벡터로 매핑합니다. 뒤이어 LSTM layer에서 벡터 시퀀스를 처리합니다.
 - **Decoder 모델**
 	- Decoder 모델은 각각 따로 처리된 이미지와 텍스트 **두 입력 모델의 인코딩 결과/벡터를 병합**하고 Dense layer을 통해 **시퀀스의 '다음 단어'를 생성**합니다.
 	- Dense layer는 softmax에 의해 **모든 단어에 대한 확률분포**를 구하여 시퀀스의 다음 단어를 생성하게 됩니다.
@@ -136,7 +136,7 @@
 
 **BLEU(Bilingual Evaluation Understudy) Score**
 
-- 캡션 생성 평가 지표로는 기존의 이미지 캡션 논문들에서 사용되는 **BLEU 스코어(BLEU-1, BLEU-2, BLEU-3, BLEU-4)**를 사용하였습니다.
+- 캡션 생성 평가 지표로는 기존의 이미지 캡션 논문들에서 사용되는 **BLEU 스코어(BLEU-1, BLEU-2, BLEU-3, BLEU-4)**를 사용했습니다.
 - BLEU 스코어는 기계번역의 결과와 사람이 직접 번역한 결과가 얼마나 유사한지 비교하여 번역에 대한 성능을 측정하는 평가 지표로, 데이터의 X가 순서정보를 가진 단어들(문장)로 이루어져 있고, y 또한 단어들의 시리즈(문장)로 이루어진 경우에 사용됩니다.
 - BLEU의 3가지 요소/기능입니다:
 	- n-gram을 통한 순서쌍들이 얼마나 겹치는지 측정(precision)
