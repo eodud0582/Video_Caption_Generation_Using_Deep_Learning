@@ -6,7 +6,8 @@
 ---
 ## 프로젝트 목적
 
-- 한국어 멀티모달 데이터를 활용하여, 이용자가 동영상을 입력하면 동영상의 상황을 묘사하는 캡션을 만들어주는 **CNN+LSTM 기반의 동영상 캡셔닝 모델을 개발**하였습니다.
+- 캡셔닝(captioning)이란 이미지나 영상이 주어졌을 때, 해당 이미지나 영상에 대한 설명을 문장 형식으로 생성하는 기술입니다. 
+- 한국어 멀티모달 데이터를 활용하여, 이용자가 동영상을 입력하면 동영상의 상황/내용을 묘사하는 캡션을 생성해 주는 **CNN+LSTM 기반의 동영상 캡셔닝 모델을 개발**하였습니다.
 
 ---
 ## 프로젝트 결과
@@ -30,6 +31,8 @@
 
 ![image](https://user-images.githubusercontent.com/38115693/153365286-ecd7ed33-79d3-4bdf-90e8-9f39f92172b6.png)
 
+- 프로젝트 기간: 2022.01.11~2022.02.02 (3.5주)
+
 ---
 ## 프로젝트 배경
 
@@ -40,8 +43,6 @@
 - 한국어 데이터의 부족으로 한국어를 대상으로 한 동영상/이미지 캡션 연구는 활발히 이루어지지 못했습니다. **기존 동영상/이미지 캡션 연구와 개발도 대다수 영어로 공개된 데이터셋이 이용**되었으며, 한글 캡션을 생성하기 위해서는 **영어 데이터를 번역하여 사용하거나 캡션 결과를 번역**해야 했습니다. 하지만 국내에서도 한국어 캡션 데이터셋를 최근에서야 제공하고 있습니다. 이를 활용하여, **국내 환경과 한국어에 맞는 동영상/이미지 캡션 생성 모델 개발이 가능**해 졌습니다. 
 
 ---
-구체적인 설명(모델 구조, 학습 원리, 캡션 생성 원리, 평가 방법, 데이터 소개, 데이터 정리/전처리, 모델링 등)
-
 ## 데이터
 
 ![image](https://user-images.githubusercontent.com/38115693/153358951-a01619cf-5801-42df-aab8-880ac0e4f9ca.png)
@@ -71,36 +72,55 @@
 
 ### 이미지 캡셔닝 모델
 
-<div align=center><img src="https://user-images.githubusercontent.com/38115693/153812190-f106a7e1-416e-45ff-80fd-16dcf1262722.png" width="500"></div>
+**Merge Encoder-Decoder Model**
+
+<br>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/153910950-13bdabce-df27-4e8a-a64c-827fcf8d42a6.png" width="300"></div>
 <div align=center> Merge Architecture for Encoder-Decoder Model in Caption Generation </div>
 <br>
-
-**Merge Encoder-Decoder Model**
 
 - **Encoder-Decoder** architecture 기반
 	- Encoder: 이미지와 텍스트를 읽어 고정된 길이의 벡터로 인코딩하는 network model
 	- Decoder: 인코딩된 이미지와 텍스트를 이용해 텍스트 설명을 생성하는 network model
-- Encoder-Decoder architecture 구현을 위해 _Marc Tanti, et al._ _(2017)_가 제시한 **Merge** 모델을 사용
+- Encoder-Decoder architecture 구현을 위해 *Marc Tanti, et al.* (*2017*)가 제시한 **Merge** 모델을 사용
 	- Merge architecture에서는 **이미지와 언어/텍스트 정보가 별도로 인코딩** 되며, 이후 **multimodal layer** architecture의 Feedforward Network(FF)에서 병합(merge)되어 함께 처리됩니다.
 	- CNN을 encoder로, RNN을 decoder로 사용한 기존의 Inject architecture와 비교하여, Merge 모델은 RNN을 텍스트 데이터에 대해서만 인코딩하고 해석하는 데 온전히 사용 할 수 있으며, 인코딩에 GloVe, FastText와 같은 pre-trained language model을 사용 할 수 있다는 장점이 있습니다. 또한, Merge 모델이 더 작은 layers로 더 나은 캡셔닝 성능을 보인다 알려져 있습니다.
 
+
+**CNN-LSTM**
 <br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png" width="500"></div>
 <div align=center> RNN as Language Model </div>
 <br>
 
-**CNN-LSTM**
 - **CNN**을 이미지 데이터 인코딩을 위한 '**이미지 모델**'로, **RNN/LSTM**을 텍스트 시퀀스 데이터를 인코딩하는 '**언어 모델**'로 사용
-	- 이미지 인코딩을 위해, ImageNet 데이터셋으로 pre-trained 된 CNN 모델을 사용하는데, 다른 pre-trained 모델에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 **InceptionV3**를 사용하여 전이학습(transfer learning) 합니다. 여기서 추출된 이미지 특성들은 캡셔닝 모델의 input으로 사용됩니다.
-	- 텍스트 인코딩을 위해, 토큰화한 텍스트 시퀀스를 input으로 받고, pre-trained model인 **FastText**를 사용하여 embedding layer에서 모든 단어를 200차원 벡터로 매핑합니다. 뒤이어 RNN layer로 **LSTM**을 사용합니다. 
+	- 이미지 인코딩: ImageNet 데이터셋으로 pre-trained 된 CNN 모델을 사용하는데, 다른 pre-trained 모델에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 **InceptionV3**를 사용하여 전이학습(transfer learning) 합니다. 여기서 추출된 이미지 특성들은 캡셔닝 모델의 input으로 사용됩니다.
+	- 텍스트 인코딩: 토큰화 된 integer 형태의 텍스트 시퀀스 데이터를 input으로 받고, pre-trained model인 **FastText**를 사용하여 embedding layer에서 모든 단어를 200차원 벡터로 매핑합니다. 뒤이어 LSTM layer에서 벡터 시퀀스를 처리합니다.
 - **Decoder 모델**
-	- Decoder 모델은 각각 따로 처리된 이미지와 텍스트 **두 입력 모델의 인코딩 결과/벡터를 병합**하고 Dense layer을 통해 캡션을 예측하게 됩니다.
-	- Dense layer는 softmax에 의해 **모든 단어에 대한 확률분포**를 구하여 **시퀀스의 다음 단어를 예측**합니다.
+	- Decoder 모델은 각각 따로 처리된 이미지와 텍스트 **두 입력 모델의 인코딩 결과/벡터를 병합**하고 Dense layer을 통해 **시퀀스의 '다음 단어'를 생성**합니다.
+	- Dense layer는 softmax에 의해 **모든 단어에 대한 확률분포**를 구하여 시퀀스의 다음 단어를 생성하게 됩니다.
 
 <br>
-<div align=center><img src="https://user-images.githubusercontent.com/38115693/153900448-f7693055-2332-4610-90a7-8ded9a0d762f.png" width="1000"></div>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/153908121-a0cb87fc-0517-4551-8721-cc7c0bbe72dd.png" width="1000"></div>
 
 ### 캡션 생성
+
+**캡션 생성 과정**
+
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/153921982-d1373341-5fba-444a-87a2-d801ee68e28a.png" width="600"></div>
+<br>
+
+- 학습된 모델을 사용하여 이미지에 대한 캡션을 생성할 때에, 시퀀스의 다음 단어를 예측해 가는 원리로 캡션을 생성합니다. 다음 단어를 예측 또는 선택할 때엔 모든 단어에 대한 확률분포를 구하여 예측을 힙니다.
+- 이미지를 입력으로 받으면, 시퀀스의 시작을 의미하는 토큰인 'startseq'를 전달하여 단어 하나를 생성한 다음, 다시 모델을 호출하고 생성된 단어까지를 연결하여/합쳐서 input으로 넘겨 그 다음 단어를 생성하게 됩니다.
+- 이렇게 다음 단어를 생성하고, 지금까지 생덩된 단어들을 다시 모델에 input으로 넘기고, 또 다음 단어를 생성하는 과정을 재귀적으로 반복합니다. 그러다 아래 조건에 도달하게 되면 반복을 종료하고, 최종적으로 이미지에 대한 캡션이 만들어지게 됩니다.
+	- (1) 시퀀스의 끝을 의미하는 토큰인 'endseq'가 생성되거나,
+	- (2) 최대 캡션 길이에 도달할 때까지 반복
+- 캡션 생성 
+
+**Greedy Search**
+
+
+**Beam Search**
 
 The final output Dense layer makes a softmax prediction, which will be a probability distribution over all words in the vocabulary, for the next word in the sequence.
 
