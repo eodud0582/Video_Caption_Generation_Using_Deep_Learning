@@ -94,50 +94,17 @@
 	- 이미지 인코딩을 위해, ImageNet 데이터셋으로 pre-trained 된 CNN 모델을 사용하였는데, 다른 pre-trained 모델에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 Inception V3를 사용하여 전이학습(transfer learning) 하였습니다. 여기서 추출된 이미지 특성들은 캡셔닝 모델의 input으로 사용했습다.
 	- 텍스트 인코딩을 위해, 토큰화한 텍스트 시퀀스를 input으로 받아 pre-trained model인 FastText를 사용하여 embedding layer에서 모든 단어를 200차원 벡터로 매핑했습니다. 뒤이어 RNN layer로 LSTM을 사용했습니다. 
 - **Decoder 모델**
-	- Decoder 모델에서 위에서 각각 따로 처리된 이미지와 텍스트 두 입력 모델의 인코딩 결과/벡터를 병합하고, Dense layer을 통해 시퀀스의 다음 단어를 예측하여 캡션을 생성합니다.
+	- Decoder 모델은 각각 따로 처리된 이미지와 텍스트 두 입력 모델의 인코딩 결과/벡터를 병합하고 Dense layer을 통해 시퀀스의 다음 단어를 예측하여 캡션을 생성하게 됩니다.
+	- 모델은 다음 단어에 대한 예측을 진행
 
-<div align=center><img src="https://user-images.githubusercontent.com/38115693/153896768-eec69673-3354-4a22-9e28-3104f017a371.png" width="1000"></div>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/153900448-f7693055-2332-4610-90a7-8ded9a0d762f.png" width="1000"></div>
 
+**캡션 생성**
 
-
----
-
-
-
-
-Used an Encoder-Decoder model
-- encoder model merges both the encoded form of the image and the encoded form of the text caption. The combination of these two encoded inputs is then used by a very simple decoder model to generate the next word in the sequence.
-- model will treat CNN as the ‘image model’ and the RNN/LSTM as the ‘language model’ to encode the text sequences of varying length. The vectors resulting from both the encodings are then merged and processed by a Dense layer to make a final prediction.
-
-- The merge model combines both the encoded form of the image input with the encoded form of the text description generated so far.
-The combination of these two encoded inputs is then used by a very simple decoder model to generate the next word in the sequence.
-The approach uses the recurrent neural network only to encode the text generated so far.
-
-
-"In the case of ‘merge’ architectures, the image is left out of the RNN subnetwork, such that the RNN handles only the caption prefix, that is, handles only purely linguistic information. After the prefix has been vectorised, the image vector is then merged with the prefix vector in a separate ‘multimodal layer’ which comes after the RNN subnetwork"
-— Where to put the Image in an Image Caption Generator, 2017.
-
-
-CNN-LSTM
-
-The main approach to this image captioning is in three parts:
-
-- Photo Feature Extractor. This is a 16-layer VGG model pre-trained on the ImageNet dataset. We have pre-processed the photos with the VGG model (without the output layer) and will use the extracted features predicted by this model as input.
-- Sequence Processor. This is a word embedding layer for handling the text input, followed by a Long Short-Term Memory (LSTM) recurrent neural network layer.
-- Decoder (for lack of a better name). Both the feature extractor and sequence processor output a fixed-length vector. These are merged together and processed by a Dense layer to make a final prediction.
-
-- The Photo Feature Extractor model expects input photo features to be a vector of 4,096 elements. These are processed by a Dense layer to produce a 256 element representation of the photo.
-- The Sequence Processor model expects input sequences with a pre-defined length (34 words) which are fed into an Embedding layer that uses a mask to ignore padded values. This is followed by an LSTM layer with 256 memory units.
-- Both the input models produce a 256 element vector. Further, both input models use regularization in the form of 50% dropout. This is to reduce overfitting the training dataset, as this model configuration learns very fast.
 - The Decoder model merges the vectors from both input models using an addition operation. This is then fed to a Dense 256 neuron layer and then to a final output Dense layer that makes a softmax prediction over the entire output vocabulary for the next word in the sequence.
 
----
 when the model is used to generate descriptions, the generated words will be concatenated and recursively provided as input to generate a caption for an image.
 
-The function below named create_sequences(), given the tokenizer, a maximum sequence length, and the dictionary of all descriptions and photos, will transform the data into input-output pairs of data for training the model. There are two input arrays to the model: one for photo features and one for the encoded text. There is one output for the model which is the encoded next word in the text sequence.
-
-The input text is encoded as integers, which will be fed to a word embedding layer.
-The photo features will be fed directly to another part of the model.
 The model will output a prediction, which will be a probability distribution over all words in the vocabulary.
 
 ---
