@@ -63,22 +63,33 @@
 
 ### 이미지 캡셔닝 모델 구조
 
-- 이미지 캡셔닝 딥러닝 모델은 Encoder-Decoder architecture를 기반으로 만들었습니다.
-- 이를 위해, 'merge' 모델을 사용하여 구현하였습니다 (described by Marc Tanti, et al. in their 2017 papers). 
+- 이미지 캡셔닝 딥러닝 모델은 **Encoder-Decoder** architecture를 기반으로 만들었습니다.
+	- Encoder: 이미지와 텍스트를 읽어 고정된 길이의 벡터로 인코딩하는 network model
+	- Decoder: 인코딩된 이미지와 텍스트를 이용해 텍스트 설명을 생성하는 network model
+- Encoder-Decoder architecture 구현을 위해 'merge' 모델을 사용하였습니다. (described by Marc Tanti, et al. in their 2017 papers)
 
 ![image](https://user-images.githubusercontent.com/38115693/153812190-f106a7e1-416e-45ff-80fd-16dcf1262722.png)
 Merge Architecture for Encoder-Decoder Model in Caption Generation
 
-Merge architecture에선 
+'Merge' 모델에서는 이미지와 언어 정보가 별도로 인코딩 되며, 이후 multimodal layer architecture의 Feedforward Network에서 함께 처리됩니다.
+- To encode our image features we will make use of transfer learning. There are a lot of models that we can use like VGG-16, InceptionV3, ResNet, etc.
+We will make use of the inceptionV3 model which has the least number of training parameters in comparison to the others and also outperforms them.
+- To encode our text sequence we will map every word to a 200-dimensional vector. For this will use a pre-trained Glove model. This mapping will be done in a separate layer after the input layer called the embedding layer.
 
-I created a merge architecture in order to keep the image out of the RNN/LSTM and thus be able to train the part of the neural network that handles images and the part that handles language separately, using images and sentences from separate training sets. In the merge model, a different representation of the image can be combined with the final RNN state before each prediction.
+
+To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
+
+
+merge architecture
+- to keep the image out of the RNN/LSTM and thus be able to train the part of the neural network that handles images and the part that handles language separately, using images and sentences from separate training sets.
+- a different representation of the image can be combined with the final RNN state before each prediction.
 
 Merge Architecture 장점:
 - The merging of image features with text encodings to a later stage in the architecture is advantageous and can generate better quality captions with smaller layers than the traditional inject architecture (CNN as encoder and RNN as a decoder).
 - Several studies have also proven that merging architectures works better than injecting architectures for some cases.
 
 Used an Encoder-Decoder model
-- encoder model combines both the encoded form of the image and the encoded form of the text caption and feed to the decoder
+- encoder model combines both the encoded form of the image and the encoded form of the text caption. The combination of these two encoded inputs is then used by a very simple decoder model to generate the next word in the sequence.
 - model will treat CNN as the ‘image model’ and the RNN/LSTM as the ‘language model’ to encode the text sequences of varying length. The vectors resulting from both the encodings are then merged and processed by a Dense layer to make a final prediction.
 
 - To encode our image features we will make use of transfer learning. There are a lot of models that we can use like VGG-16, InceptionV3, ResNet, etc.
@@ -99,7 +110,6 @@ The approach uses the recurrent neural network only to encode the text generated
 ![image](https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png)
 RNN as Language Model
 
-Merging architecture - FF feed-forward networks.
 
 In the Merging Architecture, the image and the language information are encoded separately and introduced together in a feed-forward network, creating a multimodal layer architecture.
 
