@@ -6,7 +6,7 @@
 ---
 ## 프로젝트 목적
 
-한국어 멀티모달 데이터를 활용하여, 이용자가 동영상을 입력하면 동영상의 상황을 묘사하는 캡션을 만들어주는 **CNN+LSTM 기반의 동영상 캡셔닝 모델을 개발**하였습니다.
+- 한국어 멀티모달 데이터를 활용하여, 이용자가 동영상을 입력하면 동영상의 상황을 묘사하는 캡션을 만들어주는 **CNN+LSTM 기반의 동영상 캡셔닝 모델을 개발**하였습니다.
 
 ---
 ## 프로젝트 결과
@@ -53,73 +53,68 @@
 ---
 ## 모델 구조
 
-**동영상 캡션 생성 모델 구조**
+### 동영상 캡셔닝 모델 구조
 
-동영상에 대한 캡션 생성 과정은 아래와 같습니다:
-
-![image](https://user-images.githubusercontent.com/38115693/153806581-1f86f99a-a2ce-41e8-be3f-8ac9b834ec8b.png)
+![image](https://user-images.githubusercontent.com/38115693/153815473-2fff29db-1349-4cae-8f2e-092341d32f2e.png)
 
 - 입력받은 동영상을 여러 **프레임**으로 나누고, **이미지 캡션 생성 모델**을 통해 각 프레임 이미지에 대한 캡션을 생성합니다.
 - 각 프레임 이미지에 대해 생성된 캡션을 해당 프레임 이미지에 출력하고, 프레임 이미지들을 다시 동영상으로 변환합니다.
 - 동영상이 플레이 될 때 캡션이 시시각각 변하는 경우들로 인해 캡션을 보는 것에 불편함이 있었습니다. 이에 대해, **SSIM 이미지 유사도 분석**을 통해 비슷한 프레임/장면에서는 동일한 캡션을 출력하게 만들어 동영상 속 출력된 캡션이 부드럽게 전환되고, 보기 편하게 만들었으며, 캡셔닝 처리에 걸리는 시간도 단축시켰습니다.
 
-**이미지 캡션 생성 모델 구조**
+### 이미지 캡셔닝 모델 구조
+
+- 이미지 캡셔닝 딥러닝 모델은 Encoder-Decoder architecture를 기반으로 만들었습니다.
+- 이를 위해, 'merge' 모델을 사용하여 구현하였습니다 (described by Marc Tanti, et al. in their 2017 papers). 
+
+![image](https://user-images.githubusercontent.com/38115693/153812190-f106a7e1-416e-45ff-80fd-16dcf1262722.png)
+Merge Architecture for Encoder-Decoder Model in Caption Generation
+
+Merge architecture에선 
+
+I created a merge architecture in order to keep the image out of the RNN/LSTM and thus be able to train the part of the neural network that handles images and the part that handles language separately, using images and sentences from separate training sets. In the merge model, a different representation of the image can be combined with the final RNN state before each prediction.
+
+Merge Architecture 장점:
+- The merging of image features with text encodings to a later stage in the architecture is advantageous and can generate better quality captions with smaller layers than the traditional inject architecture (CNN as encoder and RNN as a decoder).
+- Several studies have also proven that merging architectures works better than injecting architectures for some cases.
 
 Used an Encoder-Decoder model
-encoder model combines both the encoded form of the image and the encoded form of the text caption and feed to the decoder
-model will treat CNN as the ‘image model’ and the RNN/LSTM as the ‘language model’ to encode the text sequences of varying length. The vectors resulting from both the encodings are then merged and processed by a Dense layer to make a final prediction.
+- encoder model combines both the encoded form of the image and the encoded form of the text caption and feed to the decoder
+- model will treat CNN as the ‘image model’ and the RNN/LSTM as the ‘language model’ to encode the text sequences of varying length. The vectors resulting from both the encodings are then merged and processed by a Dense layer to make a final prediction.
 
-create a merge architecture in order to keep the image out of the RNN/LSTM and thus be able to train the part of the neural network that handles images and the part that handles language separately, using images and sentences from separate training sets. 
-
-In the merge model, a different representation of the image can be combined with the final RNN state before each prediction.
-
-The merging of image features with text encodings to a later stage in the architecture is advantageous and can generate better quality captions with smaller layers than the traditional inject architecture (CNN as encoder and RNN as a decoder).
-
-To encode our image features we will make use of transfer learning. There are a lot of models that we can use like VGG-16, InceptionV3, ResNet, etc.
+- To encode our image features we will make use of transfer learning. There are a lot of models that we can use like VGG-16, InceptionV3, ResNet, etc.
 We will make use of the inceptionV3 model which has the least number of training parameters in comparison to the others and also outperforms them.
-
-To encode our text sequence we will map every word to a 200-dimensional vector. For this will use a pre-trained Glove model. This mapping will be done in a separate layer after the input layer called the embedding layer.
-
-To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
+- To encode our text sequence we will map every word to a 200-dimensional vector. For this will use a pre-trained Glove model. This mapping will be done in a separate layer after the input layer called the embedding layer.
+- To generate the caption we will be using two popular methods which are Greedy Search and Beam Search. These methods will help us in picking the best words to accurately define the image.
 
 ---
 
-이미지 캡션 생성 모델은 based on the “merge-model” described by Marc Tanti, et al. in their 2017 papers 이다. Several studies have also proven that merging architectures works better than injecting architectures for some cases.
-
-![image](https://user-images.githubusercontent.com/38115693/153629089-db64f778-ce06-4585-a6ed-0584a0d8179e.png)
-
-The merge model combines both the encoded form of the image input with the encoded form of the text description generated so far.
-
+- The merge model combines both the encoded form of the image input with the encoded form of the text description generated so far.
 The combination of these two encoded inputs is then used by a very simple decoder model to generate the next word in the sequence.
-
 The approach uses the recurrent neural network only to encode the text generated so far.
 
-In the case of ‘merge’ architectures, the image is left out of the RNN subnetwork, such that the RNN handles only the caption prefix, that is, handles only purely linguistic information. After the prefix has been vectorised, the image vector is then merged with the prefix vector in a separate ‘multimodal layer’ which comes after the RNN subnetwork
-
+"In the case of ‘merge’ architectures, the image is left out of the RNN subnetwork, such that the RNN handles only the caption prefix, that is, handles only purely linguistic information. After the prefix has been vectorised, the image vector is then merged with the prefix vector in a separate ‘multimodal layer’ which comes after the RNN subnetwork"
 — Where to put the Image in an Image Caption Generator, 2017.
 
 
 ![image](https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png)
-
-
-we need a language RNN model as we want to generate a word sequence, so, when should we introduce the image data vectors in the language model?
+RNN as Language Model
 
 Merging architecture - FF feed-forward networks.
+
 In the Merging Architecture, the image and the language information are encoded separately and introduced together in a feed-forward network, creating a multimodal layer architecture.
 
 CNN-LSTM
+
 The main approach to this image captioning is in three parts:
 
-Photo Feature Extractor. This is a 16-layer VGG model pre-trained on the ImageNet dataset. We have pre-processed the photos with the VGG model (without the output layer) and will use the extracted features predicted by this model as input.
-Sequence Processor. This is a word embedding layer for handling the text input, followed by a Long Short-Term Memory (LSTM) recurrent neural network layer.
-Decoder (for lack of a better name). Both the feature extractor and sequence processor output a fixed-length vector. These are merged together and processed by a Dense layer to make a final prediction.
-The Photo Feature Extractor model expects input photo features to be a vector of 4,096 elements. These are processed by a Dense layer to produce a 256 element representation of the photo.
+- Photo Feature Extractor. This is a 16-layer VGG model pre-trained on the ImageNet dataset. We have pre-processed the photos with the VGG model (without the output layer) and will use the extracted features predicted by this model as input.
+- Sequence Processor. This is a word embedding layer for handling the text input, followed by a Long Short-Term Memory (LSTM) recurrent neural network layer.
+- Decoder (for lack of a better name). Both the feature extractor and sequence processor output a fixed-length vector. These are merged together and processed by a Dense layer to make a final prediction.
 
-The Sequence Processor model expects input sequences with a pre-defined length (34 words) which are fed into an Embedding layer that uses a mask to ignore padded values. This is followed by an LSTM layer with 256 memory units.
-
-Both the input models produce a 256 element vector. Further, both input models use regularization in the form of 50% dropout. This is to reduce overfitting the training dataset, as this model configuration learns very fast.
-
-The Decoder model merges the vectors from both input models using an addition operation. This is then fed to a Dense 256 neuron layer and then to a final output Dense layer that makes a softmax prediction over the entire output vocabulary for the next word in the sequence.
+- The Photo Feature Extractor model expects input photo features to be a vector of 4,096 elements. These are processed by a Dense layer to produce a 256 element representation of the photo.
+- The Sequence Processor model expects input sequences with a pre-defined length (34 words) which are fed into an Embedding layer that uses a mask to ignore padded values. This is followed by an LSTM layer with 256 memory units.
+- Both the input models produce a 256 element vector. Further, both input models use regularization in the form of 50% dropout. This is to reduce overfitting the training dataset, as this model configuration learns very fast.
+- The Decoder model merges the vectors from both input models using an addition operation. This is then fed to a Dense 256 neuron layer and then to a final output Dense layer that makes a softmax prediction over the entire output vocabulary for the next word in the sequence.
 
 ---
 when the model is used to generate descriptions, the generated words will be concatenated and recursively provided as input to generate a caption for an image.
