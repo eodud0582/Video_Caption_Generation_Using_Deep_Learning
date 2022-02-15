@@ -1,7 +1,7 @@
-# Deep Learning Based Video Caption Generator (배너 삽입)
+<img width="100%" alt="banner_2" src="https://user-images.githubusercontent.com/38115693/154050968-88be5579-22ba-4437-9baa-72d59f4c171e.png">
 
-# 딥러닝 기반 동영상 캡션 자동 생성
-### 한국어 데이터 및 딥러닝을 활용한 동영상 캡션 자동 생성 모델 개발
+# 딥러닝 기반 동영상 캡션 생성
+#### 한국어 데이터 및 딥러닝을 활용한 동영상 캡션 생성 모델 개발
 
 ---
 ## 프로젝트 목적
@@ -173,9 +173,9 @@
 <br>
 
 - 모델링은 크게 6가지 시도로 나뉩니다.
-- 실험은 여러가지 요소를 변경해가며 진행했습니다.
-	- 데이터셋, 임베딩 방법, 텍스트 전처리 및 토큰화 방법, 단어 최소 빈도수 threshold, 에포크(epoch), 배치사이즈(batch size), 학습률(learning rate)
-	- 이미지 특성 추출은 모든 과정에서 동일하게 pre-trained model인 InceptionV3를 사용했습니다.
+- 실험은 아래의 요소들을 변경해가며 진행했습니다.
+	- 데이터셋, 임베딩 방법, 텍스트 전처리 및 토큰화 방법, 단어 최소 빈도수 threshold, 에포크(epoch), 배치사이즈(batch size), 학습률(learning rate), 교차검증(cross validation)
+- 이미지 특성 추출은 모든 과정에서 동일하게 pre-trained model인 InceptionV3를 사용했습니다.
 - 실험을 거치면서 BLEU 스코어가 지속적으로 증가했습니다. 최종적으로 마지막 모델이 가장 높은 성능을 보였습니다.
 
 ### Trial 1
