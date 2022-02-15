@@ -132,7 +132,7 @@
 - Beam의 수는 일반적으로 5 또는 10을 사용하는데, beam size가 클수록 타겟 시퀀스가 맞을 확률이 높지만 decoding 속도가 떨어지게 됩니다.
 
 ---
-## 모델 평가
+## 캡셔닝 모델 평가
 
 **BLEU(Bilingual Evaluation Understudy) Score**
 
@@ -159,21 +159,27 @@
 7. BLEU 평가를 통해 모델에 대한 정량적 평가를 합니다.
 
 ---
-## 모델링 세부 과정
+## 모델링 세부 과정 및 평가
 
-모델링을 위해 크게 6가지 시도를 하였습니다.
+**모델 BLEU 평가 결과**
 
-(BLEU 결과?)
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154014256-c2a3248b-f0e9-41cb-a0ee-bd19170c3b8b.png" width="500"></div>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154012751-6d4e564f-0b2f-404f-9408-e8a6084a65bd.png" width="500"></div>
+<br>
 
-세부적인 모델링 과정 입니다...
+- 모델링은 크게 6가지 시도로 나뉩니다.
+- 실험을 거치면서 BLEU 스코어가 지속적으로 증가했습니다.
+- 최종적으로 마지막 모델이 가장 높은 성능을 보였습니다.
 
 ### Trial 1
+
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/153630047-befa082e-c486-45ea-ab70-2aabad793d2a.png" width="500"></div>
 
 - 영상이라는건 결국 이미지들의 연속
 	- 데이터 구조를 보면, 영상 안에는 여러 장면들이 있습니다. 그리고 하나의 동일한 장면에 대해선 프레임 이미지들이 다 비슷하고. 또 캡션도 동일합니다.
 그렇다면 굳이 비슷한 이미지들을 학습할 필요가 있을까? 차라리 각 영상마다 캡션이 다른, 즉 유니크한 캡션들과 관련 이미지들만 추출하여 학습을 해도 충분하지 않을까? 라고 생각하였습니다. 또한, 이렇게 하면 모든 데이터를 사용하지 않아도, 다양한 이미지와 캡션을 학습시킬 수 있기 때문에 모델이 좀 더 일반화 되지 않을까? 라고 기대했습니다.
 
-
+### Trial 1
 
 
 
