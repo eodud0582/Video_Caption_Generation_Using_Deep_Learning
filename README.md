@@ -61,7 +61,7 @@
 <div align=center> AI Hub MSCOCO Image Caption Dataset </div>
 
 ---
-## :art: 모델 구조
+## :mag_right: 모델 구조
 
 ### :clapper: 동영상 캡셔닝 모델
 
@@ -153,7 +153,7 @@
 - 점수는 0.0~1.0 사이에서 나타내는데, **1.0에 가까울 수록, 높을수록 좋은 점수를 의미**합니다.
 
 ---
-## :arrows_counterclockwise: 모델링 과정
+## :musical_keyboard: 모델링 과정
 
 1. 사전 훈련된 CNN 모델 InceptionV3를 사용하여 이미지 특성들을 추출합니다 (추출된 이미지 특성들은 나중에 LSTM 결과/출력과 병합됩니다).
 2. Description 텍스트 시퀀스 데이터에 대해 전처리와 토큰화를 합니다. 그리도 embedding vector를 준비합니다 (텍스트 시퀀스 데이터는 나중에 임베딩 되고 LSTM에서 처리됩니다).
@@ -164,7 +164,7 @@
 7. BLEU 평가를 통해 모델에 대한 정량적 평가를 합니다.
 
 ---
-## :mag_right: 모델링 세부 과정 및 평가
+## :wrench: 모델링 세부 과정 및 평가
 
 **모델 BLEU 평가 결과**
 
