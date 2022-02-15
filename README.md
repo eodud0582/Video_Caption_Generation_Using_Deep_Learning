@@ -61,7 +61,7 @@
 <div align=center> AI Hub MSCOCO Image Caption Dataset </div>
 
 ---
-## :books: 모델 구조
+## :art: 모델 구조
 
 ### :clapper: 동영상 캡셔닝 모델
 
