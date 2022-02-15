@@ -90,7 +90,7 @@
 	- Decoder: 인코딩된 이미지와 텍스트를 이용해 텍스트 설명을 생성하는 network model
 - Encoder-Decoder architecture 구현을 위해 *Marc Tanti, et al.* (*2017*)가 제시한 **Merge** 모델을 사용
 	- Merge architecture에서는 **이미지와 언어/텍스트 정보가 별도로 인코딩** 되며, 이후 **multimodal layer** architecture의 Feedforward Network(FF)에서 병합(merge)되어 함께 처리됩니다.
-	- CNN을 encoder로, RNN을 decoder로 사용한 기존의 Inject architecture와 비교하여, Merge 모델은 RNN을 텍스트 데이터에 대해서만 인코딩하고 해석하는 데 온전히 사용 할 수 있으며, 인코딩에 GloVe, FastText와 같은 pre-trained language model을 사용 할 수 있다는 장점이 있습니다. 또한, Merge 모델이 더 작은 layers로 더 나은 캡셔닝 성능을 보인다 알려져 있습니다.
+	- CNN을 encoder로, RNN을 decoder로 사용한 기존의 Inject architecture와 비교하여, Merge 모델은 RNN을 텍스트 데이터에 대해서만 인코딩하고 해석하는 데 온전히 사용 할 수 있으며, 인코딩에 GloVe, FastText와 같은 pre-trained language model을 사용 할 수 있다는 장점이 있습니다. 또한, Merge 모델이 더 작은 layers로 더 나은 캡셔닝 성능을 내는 것으로 알려져 있습니다.
 
 **CNN(Convolutional Neural Networks) + LSTM(Long Short-Term Memory)**
 
@@ -108,6 +108,12 @@
 <br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153908121-a0cb87fc-0517-4551-8721-cc7c0bbe72dd.png" width="1000"></div>
 <div align=center> Defined Model Structure </div>
+
+**모델 학습**
+
+(input 데이터 형태)
+
+(모델의 학습 방법)
 
 ---
 ## :cool: 캡션 생성
