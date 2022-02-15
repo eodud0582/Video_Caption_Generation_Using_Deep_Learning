@@ -95,8 +95,8 @@
 <br>
 
 - **CNN**을 이미지 데이터 인코딩을 위한 '**이미지 모델**'로, **RNN/LSTM**을 텍스트 시퀀스 데이터를 인코딩하는 '**언어 모델**'로 사용
-	- 이미지 인코딩: ImageNet 데이터셋으로 pre-trained 된 CNN 모델을 사용하는데, 다른 pre-trained 모델에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 **InceptionV3**를 사용하여 전이학습(transfer learning) 합니다. 여기서 추출된 이미지 특성들은 캡셔닝 모델의 input으로 사용됩니다.
-	- 텍스트 인코딩: 토큰화 된 정수 형태의 텍스트 시퀀스 데이터를 input으로 받고, pre-trained language model인 **FastText**를 사용하여 embedding layer에서 모든 단어를 200차원 벡터로 매핑합니다. 뒤이어 LSTM layer에서 벡터 시퀀스를 처리합니다.
+	- 이미지 인코딩: ImageNet 데이터셋으로 pre-trained 된 CNN 모델을 사용하는데, 다른 pre-trained 모델에 비해 상대적으로 training parameters가 더 적으면서도 더 우수한 성능을 가진 **InceptionV3를 사용하여 전이학습(transfer learning)을 통해 이미지 특성을 추출** 합니다. 여기서 추출된 이미지 특성들은 캡셔닝 모델의 input으로 사용됩니다.
+	- 텍스트 인코딩: 토큰화 된 정수 형태의 텍스트 시퀀스 데이터를 input으로 받고, pre-trained language model인 **FastText를 사용하여 embedding** layer에서 모든 단어를 200차원 벡터로 매핑합니다. 뒤이어 **LSTM** layer에서 벡터 시퀀스를 처리합니다.
 - **Decoder 모델**
 	- Decoder 모델은 각각 따로 처리된 이미지와 텍스트 **두 입력 모델의 인코딩 결과/벡터를 병합**하고 Dense layer을 통해 **시퀀스의 '다음 단어'를 생성**합니다.
 	- Dense layer는 softmax에 의해 **모든 단어에 대한 확률분포**를 구하여 시퀀스의 다음 단어를 생성하게 됩니다.
@@ -118,7 +118,7 @@
 - 이렇게 **다음 단어를 생성하고, 지금까지 생덩된 단어들을 다시 모델에 input으로 넘기고, 또 다음 단어를 생성하는 과정을 재귀적으로 반복**합니다. 그러다 아래 조건에 도달하게 되면 반복을 종료하고, 최종적으로 이미지에 대한 캡션이 만들어지게 됩니다.
 	- (1) **시퀀스의 끝을 의미하는 토큰인 'endseq'가 생성**되거나,
 	- (2) **최대 캡션 길이에 도달**할 때까지 반복합니다.
-- 다음 단어를 예측하는 건 일반적으로 사용되는 Greedy Search와 Beam Search 두 기법을 사용했습니다.
+- 다음 단어를 예측하는 건 일반적으로 사용되는 **Greedy Search**와 **Beam Search** 두 기법을 사용했습니다.
 
 **Greedy Search**
 - Greedy search는 전체 단어에서 각 단어에 대한 확률 분포를 예측하여 다음 단어를 선택하는데 **각 스텝에서 가장 가능성이/확률이 높은 단어를 선택**합니다.
@@ -144,20 +144,19 @@
 	- 같은 단어가 연속적으로 나올때 과적합 되는 것을 보정(Clipping)
 - 측정 기준은 n-gram에 기반하는데, **예측 문장과 정답 문장의 n-gram들이 서로 얼마나 겹치는지 비교하여 정확도를 측정**하기 때문에 이미지 캡션 평가에서도 보편적으로 사용됩니다.
 	- 점수를 매길 최대 길이를 n-gram 길이라고 할 때, n-gram이라고 하는 연속된 n개의 단어를 기준으로 실제 캡션(ground truth)과 얼마나 공통적인 단어가 나왔는지/겹치는지를 판단해서 BLEU 점수를 계산합니다.
-	- k를 n-gram이라고 할 때, 만약 k=4라면, 길이가 4이하인 n-gram에 대해서만 고려하게 되며, 더 큰 길이의 n-gram은 무시합니다.
 	- 보통 1~4의 크기의 n-gram을 측정 지표로 사용합니다.
 - 점수는 0.0~1.0 사이에서 나타내는데, **1.0에 가까울 수록, 높을수록 좋은 점수를 의미**합니다.
 
 ---
 ## 모델링 과정
 
-1. Using pretrained CNN to extract image features. A pretrained InceptionV3 CNN will be used to extract image features which will be merged with the RNN output
-2. Prepare training data. The training captions will be tokenized and embedded using the GLOVE/FastText word embeddings. The embeddings will be fed into the RNN.
-3. Model definition
-4. Training the model
-5. Generating novel image captions using the trained model. Test images and images from the internet will be used as input to the trained model to generate captions. The captions will be examined to determine the weaknesses of the model and suggest improvements.
-6. Beam search. We will use beam search to generate better captions using the model.
-7. Model evaluation. The model will be evaluated using the BLEU and ROUGE metric.
+1. 사전 훈련된 CNN 모델 InceptionV3를 사용하여 이미지 특성들을 추출합니다 (추출된 이미지 특성들은 나중에 LSTM 결과/출력과 병합됩니다).
+2. Description 텍스트 시퀀스 데이터에 대해 전처리와 토큰화를 합니다. 그리도 embedding vector를 준비합니다 (텍스트 시퀀스 데이터는 나중에 임베딩 되고 LSTM에서 처리됩니다).
+3. 이미지 특성 데이터와 텍스트 시퀀스 데이터를 Train/Test 데이터로 나눕니다. 그리고 Train 텍스트 데이터를 기준으로 단어-인덱스 사전을 만들고 전체 단어 개수와 최대 캡션 길이를 구합니다. 이 때, 최소 빈도수 threshold를 설정해 학습에 사용할 단어 수를 줄이기도 합니다.
+4. 모델을 구현(define)합니다. 이 때, 준비한 embedding vector를 사용해 모든 단어에 대한 embedding matrix를 만들어 모델의 embedding layer에 적용합니다.
+5. 모델을 학습시킵니다.
+6. 훈련된 모델을 사용해 이미지 캡션을 생성해 모델에 대한 정성적 평가를 합니다. Greedy Search와 Beam Search 모두를 사용합니다.
+7. BLEU 평가를 통해 모델에 대한 정량적 평가를 합니다.
 
 ## 모델링 세부 과정
 
