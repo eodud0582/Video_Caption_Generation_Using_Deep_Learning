@@ -183,7 +183,7 @@
 - 이미지 특성 추출은 모든 과정에서 동일하게 pre-trained model인 InceptionV3를 사용했습니다.
 - 실험을 거치면서 BLEU 스코어가 지속적으로 증가했습니다. 최종적으로 마지막 모델이 가장 높은 성능을 보였습니다.
 
-### Trial 1
+### :one: Trial 1
 
 #### (1) Trial 1-1
 
@@ -240,7 +240,7 @@
 
 - 여전히 모든 테스트 이미지들에 대해 동일한 동일한 캡션을 출력했습니다.
 
-### Trial 2
+### :two: Trial 2
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
 
@@ -270,14 +270,15 @@
 |0.613606|0.370514|0.259467|0.132638|
 
 - Trial 1과 비교하여 BLEU 점수가 크게 증가했습니다.
+	- BLEU-1(+13점), BLEU-2(+4점), BLEU-3(+3점), BLEU-4(+4점)
 - 정성적으로도 모든 테스트 이미지들에 대해 다르면서도, 개선된 캡션 생성 성능을 보였습니다. 
 
-### Trial 3
+### :three: Trial 3
 
-<div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
 
 **실험 배경**
-- 이전 실험에서 성능이 좋아진 것을 확인했기 때문에, 이번에는 batch size를 16으로 더 늘려서 진행했습니다.
+- 이전 실험에서 성능이 좋아진 것을 확인했기 때문에, 이번에는 **batch size를 16으로 더 늘려서 진행**했습니다.
 
 **실험 내용**
 
@@ -298,22 +299,17 @@
 |0.662971|0.417041|0.295106|0.156322|
 
 - Trial 2와 비교하여 BLEU 점수가 더 증가했습니다.
+	- BLEU-1(+5점), BLEU-2(+5점), BLEU-3(+4점), BLEU-4(+2점)
 - MSCOCO 이미지 캡셔닝에 대한 사람의 BLEU 점수는 BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점이라고 합니다. Trial 3의 BLEU-1 점수 66점은 사람의 BLEU-1 점수인 67점과 비슷한 점수를 보였습니다. BLEU-2, 3, 4 또한 비교할만한 성능을 보여줬다고 생각합니다.
 
-### Trial 3
+### :four: Trial 4
 
-<div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
 
 **실험 배경**
-- 이번 실험에선 epoch 20까지는 batch size 16으로 학습하고, epoch 21~30까지는 batch size를 32로 높이되 learning rate을 0.001 --> 0.0001로 낮췄습니다.
-- batch size가 크면 learning rate을 작게 줄이는 것이 더 좋습니다.
-	- Learning rate를 너무 크게 설정할 경우, 최적화된 W 값을 지나쳐 학습이 이루어지지 않고 오류가 발생하는 오버슈팅(overshooting)이 발생 할 수 있습니다.
-	- 학습 후반부에는 모델 convergence를 위해 learning rate을 낮춰 낮은 보폭으로 minima를 찾아야 합니다. 그리고 generalization 측면에서도 낮은 learning rate이 flat minima를 찾는데 도움이 됩니다.
-	- Learning rate를 낮추는 대신 batch size를 늘려줘서 local minima로 빠지는 것을 막을 수 있다.
-
-Revising Small Batch Training for Deep Neural Networks, Masters and Luschi, 2018  
-
-또한, batch size를 늘리는 것은 learning rate을 줄이는 것과 동일한 효과가 난다고 합니다.
+- 이번 실험에선 **epoch 20까지는 batch size 16**으로 학습하고, **epoch 21~30까지는 batch size 32로 높이되 learning rate을 0.001 --> 0.0001**로 낮췄습니다. Batch size가 크면 learning rate을 작게 줄이는 것이 학습 효과가 더 좋기 때문입니다.
+- Learning rate를 너무 크게 설정할 경우, 최적화된 W 값을 지나쳐 학습이 이루어지지 않고 오류가 발생하는 오버슈팅(overshooting)이 발생 할 수 있습니다. 그래서 **학습 후반부에는 모델 convergence를 위해 learning rate을 낮춰 낮은 보폭으로 minima를 찾아야 합니다**. 그리고 generalization 측면에서도 낮은 learning rate이 flat minima를 찾는데 도움이 됩니다.
+- 또한, learning rate은 낮아졌지만 batch size는 증가했기에 local minima로 빠지는 것을 막을 수도 있습니다.
 
 **실험 내용**
 
@@ -325,22 +321,79 @@ Revising Small Batch Training for Deep Neural Networks, Masters and Luschi, 2018
 |임베딩|사전훈련된 FastText 모델 사용|
 |텍스트 처리|의미형태소 단위로 처리 및 어간 추출|
 |최소 빈도수|최소 빈도수 10 미만의 단어 제외|
-|학습 단위|Epoch 30, Batch Size 16, Learning Rate 0.001|
+|학습 단위|Epoch 20, Batch Size 16, Learning Rate 0.001 + Epoch 10, Batch Size 32, Learning Rate 0.0001|
 
 **실험 결과**
 
 |BLEU-1|BLEU-2|BLEU-3|BLEU-4|
 |------|---|---|---|
-|0.662971|0.417041|0.295106|0.156322|
+|0.674453|0.432529|0.310111|0.169415|
 
-- Trial 2와 비교하여 BLEU 점수가 더 증가했습니다.
-- MSCOCO 이미지 캡셔닝에 대한 사람의 BLEU 점수는 BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점이라고 합니다. Trial 3의 BLEU-1 점수 66점은 사람의 BLEU-1 점수인 67점과 비슷한 점수를 보였습니다. BLEU-2, 3, 4 또한 비교할만한 성능을 보여줬다고 생각합니다.
+- Trial 3과 비교해서도 BLEU 점수가 더 증가했습니다.
+	- BLEU-1(+1점), BLEU-2(+2점), BLEU-3(+2점), BLEU-4(+1점)
+- 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 매우 근접한 성능을 보여줬습니다.
 
-Trial 4
-...
-마지막 trial에 대해,
-그리고 틀린, 동일한 캡션을 출력하는 구간이 있어.. (이런 식으로)
-cross validation도 진행하여 overfitting을 확인했다. 그리고 validation loss가 더 이상 낮아지지 않는 지점의 모델을 최종 모델로 선택
+### :five: Trial 5
+
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
+
+**실험 배경**
+- Trial 4와 동일하게 epoch 20까지는 batch size 16, learning rate 0.001로 학습하고, epoch 21~30까지는 batch size 32, learning rate 0.0001로 학습 했습니다.
+- 하지만 이번 실험에선 캡션 데이터를 **의미형태소 뿐만 아니라 기능형태소(조사, 어미 등 문법적관계를 표현하는 형태소)를 포함하여 처리**하였습니다. 기능형태소는 제한적인 어휘를 가지기 때문에 예측 성능이 높게 나타날 수 있기 때문입니다.
+- 그리고 기능형태소를 포함하였기에 단어 토큰 수가 증가하였는데, 학습할 토큰 단어들의 종류가 충분히 있어야 학습에도 도움이 될 것 같아 학습할 데이터에 맞춰 최소 빈도수 threshold는 4로 변경했습니다.
+
+**실험 내용**
+
+|설정|내용|
+|------|---|
+|데이터셋|AI Hub MSCOCO 이미지 설명 데이터셋|
+|데이터 규모|약 120,000개 데이터|
+|데이터셋 분리|Train(70%):Test(30%)|
+|임베딩|사전훈련된 FastText 모델 사용|
+|텍스트 처리|의미형태소+기능형태소 단위|
+|최소 빈도수|최소 빈도수 4 미만의 단어 제외|
+|학습 단위|Epoch 20, Batch Size 16, Learning Rate 0.001 + Epoch 10, Batch Size 32, Learning Rate 0.0001|
+
+**실험 결과**
+
+|BLEU-1|BLEU-2|BLEU-3|BLEU-4|
+|------|---|---|---|
+|0.671619|0.477204|0.367619|0.234462|
+
+- Trial 4와 비교하여 BLEU 점수가 더 향상되었습니다.
+	- BLEU-1은 거의 동일했고, BLEU-2(+4점), BLEU-3(+6점), BLEU-4(+7점) 점수 모두 증가했습니다.
+- 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 더 나은 성능을 보여줬습니다.
+- 또한, 기능형태소를 포함하였더니 생성된 캡션도 문장 형태로 더욱 자연스러워 졌습니다.
+
+### :six: Trial 6
+
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
+
+**실험 배경**
+- 캡셔닝 성능이 많이 개선되었지만, 일부 이미지에 대해 비슷한 캡션을 출력하는 오류를 확인하여, 이에 대해 과적합(overfitting) 때문이 아닐까 생각했습니다.
+- Trial 5와 동일한 설정에서 cross validation을 추가하여 학습하면서 overfitting에 대한 모니터링을 진행했습니다. 그리고 validation loss가 더 이상 낮아지지 않는 지점의 모델을 찾았습니다.
+
+**실험 내용**
+
+|설정|내용|
+|------|---|
+|데이터셋|AI Hub MSCOCO 이미지 설명 데이터셋|
+|데이터 규모|약 120,000개 데이터|
+|데이터셋 분리|Train(70%):Validation(15%):Test(15%)|
+|임베딩|사전훈련된 FastText 모델 사용|
+|텍스트 처리|의미형태소+기능형태소 단위|
+|최소 빈도수|최소 빈도수 4 미만의 단어 제외|
+|학습 단위|Epoch 20, Batch Size 16, Learning Rate 0.001 + Epoch 10, Batch Size 32, Learning Rate 0.0001|
+
+**실험 결과**
+
+|BLEU-1|BLEU-2|BLEU-3|BLEU-4|
+|------|---|---|---|
+|0.677784|0.481672|0.370388|0.236028|
+
+- Trial 5와 비교하여 BLEU 점수가 미미하지만 상승했습니다.
+	- BLEU-1 점수가 약 +1점 가까이 증가하였고, BLEU-2, 3, 4는 거의 동일합니다.
+- 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 더 나은 성능을 보여줬습니다.
 
 ---
 ## :game_die: 활용방안
