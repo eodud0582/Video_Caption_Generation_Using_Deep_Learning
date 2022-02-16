@@ -269,15 +269,15 @@
 |------|---|---|---|
 |0.613606|0.370514|0.259467|0.132638|
 
-- Trial 1과 비교하여 BLEU 점수가 크게 증가했습니다. MSCOCO 데이터셋을 사용하니 모델 학습이 더 잘 되었습니다.
-- 정성적으로도 테스트 이미지들에 대해 다르면서도, 개선된 캡션 생성 성능을 보였습니다. 
+- Trial 1과 비교하여 BLEU 점수가 크게 증가했습니다.
+- 정성적으로도 모든 테스트 이미지들에 대해 다르면서도, 개선된 캡션 생성 성능을 보였습니다. 
 
 ### Trial 3
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
 
 **실험 배경**
-- 
+- 이전 실험에서 성능이 좋아진 것을 확인했기 때문에, 이번에는 batch size를 16으로 더 늘려서 진행했습니다.
 
 **실험 내용**
 
@@ -289,19 +289,54 @@
 |임베딩|사전훈련된 FastText 모델 사용|
 |텍스트 처리|의미형태소 단위로 처리 및 어간 추출|
 |최소 빈도수|최소 빈도수 10 미만의 단어 제외|
-|학습 단위|Epoch 30, Batch Size 8, Learning Rate 0.001|
+|학습 단위|Epoch 30, Batch Size 16, Learning Rate 0.001|
 
 **실험 결과**
 
 |BLEU-1|BLEU-2|BLEU-3|BLEU-4|
 |------|---|---|---|
-|0.613606|0.370514|0.259467|0.132638|
+|0.662971|0.417041|0.295106|0.156322|
 
-- Trial 1과 비교하여 BLEU 점수가 크게 증가했습니다. MSCOCO 데이터셋을 사용하니 모델 학습이 더 잘 되었습니다.
-- 정성적으로도 테스트 이미지들에 대해 다르면서도, 개선된 캡션 생성 성능을 보였습니다. 
+- Trial 2와 비교하여 BLEU 점수가 더 증가했습니다.
+- MSCOCO 이미지 캡셔닝에 대한 사람의 BLEU 점수는 BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점이라고 합니다. Trial 3의 BLEU-1 점수 66점은 사람의 BLEU-1 점수인 67점과 비슷한 점수를 보였습니다. BLEU-2, 3, 4 또한 비교할만한 성능을 보여줬다고 생각합니다.
 
+### Trial 3
 
-Trial 2
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
+
+**실험 배경**
+- 이번 실험에선 epoch 20까지는 batch size 16으로 학습하고, epoch 21~30까지는 batch size를 32로 높이되 learning rate을 0.001 --> 0.0001로 낮췄습니다.
+- batch size가 크면 learning rate을 작게 줄이는 것이 더 좋습니다.
+	- Learning rate를 너무 크게 설정할 경우, 최적화된 W 값을 지나쳐 학습이 이루어지지 않고 오류가 발생하는 오버슈팅(overshooting)이 발생 할 수 있습니다.
+	- 학습 후반부에는 모델 convergence를 위해 learning rate을 낮춰 낮은 보폭으로 minima를 찾아야 합니다. 그리고 generalization 측면에서도 낮은 learning rate이 flat minima를 찾는데 도움이 됩니다.
+	- Learning rate를 낮추는 대신 batch size를 늘려줘서 local minima로 빠지는 것을 막을 수 있다.
+
+Revising Small Batch Training for Deep Neural Networks, Masters and Luschi, 2018  
+
+또한, batch size를 늘리는 것은 learning rate을 줄이는 것과 동일한 효과가 난다고 합니다.
+
+**실험 내용**
+
+|설정|내용|
+|------|---|
+|데이터셋|AI Hub MSCOCO 이미지 설명 데이터셋|
+|데이터 규모|약 120,000개 데이터|
+|데이터셋 분리|Train(70%):Test(30%)|
+|임베딩|사전훈련된 FastText 모델 사용|
+|텍스트 처리|의미형태소 단위로 처리 및 어간 추출|
+|최소 빈도수|최소 빈도수 10 미만의 단어 제외|
+|학습 단위|Epoch 30, Batch Size 16, Learning Rate 0.001|
+
+**실험 결과**
+
+|BLEU-1|BLEU-2|BLEU-3|BLEU-4|
+|------|---|---|---|
+|0.662971|0.417041|0.295106|0.156322|
+
+- Trial 2와 비교하여 BLEU 점수가 더 증가했습니다.
+- MSCOCO 이미지 캡셔닝에 대한 사람의 BLEU 점수는 BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점이라고 합니다. Trial 3의 BLEU-1 점수 66점은 사람의 BLEU-1 점수인 67점과 비슷한 점수를 보였습니다. BLEU-2, 3, 4 또한 비교할만한 성능을 보여줬다고 생각합니다.
+
+Trial 4
 ...
 마지막 trial에 대해,
 그리고 틀린, 동일한 캡션을 출력하는 구간이 있어.. (이런 식으로)
@@ -350,5 +385,5 @@ cross validation도 진행하여 overfitting을 확인했다. 그리고 validati
 ---
 ## :books: 참고 자료
 
-
+Revising Small Batch Training for Deep Neural Networks, Masters and Luschi, 2018
 
