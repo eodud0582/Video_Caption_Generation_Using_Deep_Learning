@@ -219,6 +219,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - 모든 테스트 이미지들에 대해 동일한 동일한 캡션을 출력했습니다.
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154398344-ad5e48a5-bac1-4d84-96f5-b3e0ad9a3347.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154398349-b2a8dacd-9593-4bfd-8236-759677ed314f.png" height="200"></div>
+<div align=center> AI Hub 멀티모달 데이터셋 이미지 테스트 캡션 </div>
 
 #### (2) Trial 1-2
 
@@ -246,6 +247,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - 여전히 모든 테스트 이미지들에 대해 동일한 동일한 캡션을 출력했습니다.
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154398380-4b793986-92bc-4282-af50-68c597970610.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154398372-7dbf4205-9fde-44a7-95fb-eb788f1f2816.png" height="200"></div>
+<div align=center> AI Hub 멀티모달 데이터셋 이미지 테스트 캡션 </div>
 
 ### :two: Trial 2
 
@@ -281,6 +283,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - 그리고 테스트 이미지들에 대해 다 다른 캡션을 출력하였고, 개선된 캡션 생성 성능을 보였습니다.. 
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154415429-14e8cc12-aaed-40d2-a4d4-88e3d60abb75.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154415302-92400f1e-b032-4479-b967-77dca3aad27b.png" height="200"></div>
+<div align=center> AI Hub 멀티모달 데이터셋 이미지 테스트 캡션 </div>
 
 ### :three: Trial 3
 
@@ -312,6 +315,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - MSCOCO 이미지 캡셔닝에 대한 사람의 BLEU 점수는 BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점이라고 합니다. Trial 3의 BLEU-1 점수 66점은 사람의 BLEU-1 점수인 67점과 비슷한 점수를 보였습니다. BLEU-2, 3, 4 또한 비교할만한 성능을 보여줬다고 생각합니다.
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154415595-c6fcb891-260e-4eaa-9f89-836adce581fc.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154415646-5f3f45bc-71b4-4c4c-b201-b837a83d4ac9.png" height="200"></div>
+<div align=center> AI Hub 멀티모달 데이터셋 이미지 테스트 캡션 </div>
 
 ### :four: Trial 4
 
@@ -345,6 +349,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 매우 근접한 성능을 보여줬습니다.
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154397942-f539a7a5-c627-459d-9196-ff3f6edc0d99.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154398961-5c867184-399e-4522-9f56-64c68b9ec91b.png" height="200"></div>
+<div align=center> AI Hub 멀티모달 데이터셋 이미지 테스트 캡션 </div>
 
 ### :five: Trial 5
 
@@ -379,6 +384,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - 또한, 기능형태소를 포함하였더니 생성된 캡션도 문장 처럼 더욱 자연스러워 졌습니다.
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154392394-5ee07c5f-3a78-4c24-b7da-3b7d2481c7b5.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154392401-229e16d7-a72f-427a-95c1-e6f72781df92.png" height="200"></div>
+<div align=center> AI Hub 멀티모달 데이터셋 이미지 테스트 캡션 </div>
 
 ### :six: Trial 6
 
@@ -412,6 +418,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - 결론적으로, 마지막 모델링 Trial 6에서 가장 좋은 성능을 보여주었습니다.
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154394263-da7c4bef-eecb-41c5-a1e5-4e32c7710c90.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154393589-b792c263-bbe0-44d6-a214-5bcf01680eea.png" height="200"></div>
+<div align=center> AI Hub 멀티모달 데이터셋 이미지 테스트 캡션 </div>
 
 ---
 ## :game_die: 활용방안
@@ -438,9 +445,17 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - 이미지나 동영상에 대한 한국어 설명글을 통해 아동이나 외국인에게 언어 교육도 제공 할 수 있을 것입니다. 
 
 ---
-## :warning: 향후 과제
+## :warning: 결론 및 향후 과제
 
-(한계점, 보완점, 향후 과제 등)
+### 함의점
+- 모델 학습에 사용할 데이터가 중요하다는 것을 느꼈습니다. 
+	- 이미지에 대한 학습과 특성 추출은 패턴을 기반으로 학습이 되기 때문에, 뚜렷하고 구분되는 패턴이나 특징이 없는 이미지를 넣어 학습을 하면 성능이 좋지 않다는 것을 확인했습니다.
+	- 빈도수가 너무 적은 단어까지 포함시켜 학습을 하게 되면 시간이 많이 소요될 뿐만 아니라 정확도가 낮아질 수 있습니다. 하지만 학습시킬 단어 토큰 종류도 충분히 있어야 제대로 학습이 될 수 있습니다. 따라서, 모델링시 단어 토큰 수/규모에 따라 적당한 threshold를 지정하는 것이 중요 합니다.
+- 메모리 가용 범위 내에서 batch size는 크게 잡는 것이 좋습니다.
+- 모델 학습이 빨리 되기 때문에, cross validation 등 과적합을 줄이기 위한 조치가 필요합니다.
+- 캡션 텍스트 처리와 토큰화는 어절이나 의미형태소 단위로만 처리하는 것보다 의미형태소와 기능형태소를 포함하는 것이 더 성능이 좋습니다.
+
+### 향후 과제
 
 **모델의 캡션 예측/생성 성능 향상을 위한 시도**
 - 더 많은 데이터를 사용하여 학습한다면, 캡션 예측/생성 성능이 더 좋아질 것으로 생각되기 때문에, 데이터를 더 확보하여 시도
