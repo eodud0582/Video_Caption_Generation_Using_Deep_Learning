@@ -109,15 +109,23 @@
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/153908121-a0cb87fc-0517-4551-8721-cc7c0bbe72dd.png" width="1000"></div>
 <div align=center> Defined Model Structure </div>
 
-**모델 학습**
+### :muscle: 모델 학습 과정
 
-(input 데이터 형태)
-
-(모델의 학습 방법)
-train the model using Keras. As mentioned in the approach, the idea is to train the sequence of words through the LSTM layers so it can derive the best possible word (actually a number assigned to a word) that would follow the sequence.
+- 모델 학습에는 다음의 input과 output이 필요합니다.
+	- **Input**
+		- **이미지 특성**: InceptionV3으로 추출한 이미지 특성 벡터
+		- **캡션 text sequence**: 단어 단위로 나뉘고 인코딩 된 캡션 텍스트 시퀀스
+	- **Output**
+		- **다음 단어**: 전체 단어 수 크기의 one-hot 인코딩 된 다음 단어
+- 모델 학습을 위한 input 및 output 데이터는 data generator를 통해 생성됩니다.
+- Data generator를 통해 모델에 하나의 이미지 특성(X1)과 text sequence(X2)가 input으로 주어지면 다음 단어(y)가 학습 됩니다. 이 생성된 다음 단어는 text sequence(X2)에 포함되고 해당 이미지 특성(X1)과 함께 다시 input으로 주어져 그 다음 단어(y)에 대한 학습이 이루어집니다. 이것이 모델이 훈련되는 방법입니다.  
+- 예를 들어, 하나의 이미지 그리고 하나의 문장 "two boys are playing baseball in the ground"에 대해 아래와 같이 처리되고 학습됩니다.
+<br>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154433865-80921d06-15bc-420a-a487-169ceae72132.png" width="500"></div>
+<div align=center> Input Data Structure </div>
 
 ---
-## :cool: 캡션 생성
+## :cool: 캡션 생성 과정
 
 **학습한 모델을 사용한 캡션 생성 과정**
 
@@ -125,7 +133,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 <div align=center> Caption Generation Process </div>
 <br>
 
-- 이미지에 대한 캡션을 생성할 때, 학습한 모델은 **시퀀스의 다음 단어를 예측**(단어들의 연속을 예측) 하는데, **모든 단어에 대한 확률분포**를 구하여 예측/선택 힙니다. 다시 말해, 단어들의 후보 시퀀스들의 우도(likelihood)에 따라 점수화 되어 선택 됩니다.
+- 이미지에 대한 캡션을 생성할 때, 학습한 모델은 **시퀀스의 다음 단어를 예측**(단어들의 연속을 예측) 하는데, **모든 단어에 대한 확률분포**를 구하여 예측 힙니다. 다시 말해, 단어들의 후보 시퀀스들의 우도(likelihood)에 따라 점수화 되어 선택 됩니다.
 - 이미지를 입력으로 받으면, **시퀀스의 시작을 의미하는 토큰인 'startseq'를 전달**하여 단어 하나를 생성한 다음, 생성된 단어까지를 연결하여/합쳐서 다시 모델의 input으로 넘겨 그 다음 단어를 생성하게 됩니다.
 - 이렇게 **다음 단어를 생성하고, 지금까지 생덩된 단어들을 다시 모델에 input으로 넘기고, 또 다음 단어를 생성하는 과정을 재귀적으로 반복**합니다. 그러다 아래 조건에 도달하게 되면 반복을 종료하고, 최종적으로 이미지에 대한 캡션이 만들어지게 됩니다.
 	- (1) **시퀀스의 끝을 의미하는 토큰인 'endseq'가 생성**되거나,
@@ -144,7 +152,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - Beam의 수는 일반적으로 5 또는 10을 사용하는데, beam size가 클수록 타겟 시퀀스가 맞을 확률이 높지만 decoding 속도가 떨어지게 됩니다.
 
 ---
-## :bar_chart: 캡셔닝 모델 평가
+## :bar_chart: 캡셔닝 모델 평가 방법
 
 **BLEU(Bilingual Evaluation Understudy) Score**
 
@@ -163,7 +171,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 ## :musical_keyboard: 모델링 과정
 
 1. 사전 훈련된 CNN 모델 InceptionV3를 사용하여 이미지 특성들을 추출합니다 (추출된 이미지 특성들은 나중에 LSTM 결과/출력과 병합됩니다).
-2. Description 텍스트 시퀀스 데이터에 대해 전처리와 토큰화를 합니다. 그리도 embedding vector를 준비합니다 (텍스트 시퀀스 데이터는 나중에 임베딩 되고 LSTM에서 처리됩니다).
+2. 캡션 텍스트 시퀀스 데이터에 대해 전처리와 토큰화를 합니다. 그리도 embedding vector를 준비합니다 (텍스트 시퀀스 데이터는 나중에 임베딩 되고 LSTM에서 처리됩니다).
 3. 이미지 특성 데이터와 텍스트 시퀀스 데이터를 Train/Test 데이터로 나눕니다. 그리고 Train 텍스트 데이터를 기준으로 단어-인덱스 사전을 만들고 전체 단어 개수와 최대 캡션 길이를 구합니다. 이 때, 최소 빈도수 threshold를 설정해 학습에 사용할 단어 수를 줄이기도 합니다.
 4. 모델을 구현(define)합니다. 이 때, 준비한 embedding vector를 사용해 모든 단어에 대한 embedding matrix를 만들어 모델의 embedding layer에 적용합니다.
 5. 모델을 학습시킵니다.
@@ -453,11 +461,12 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 ---
 ## :warning: 결론 및 향후 과제
 
-### 함의점
+### 결론
+- 모델링 결과, 사람의 캡션 BLEU 점수보다 더 높은 점수를 나타냈습니다.
 - 모델 학습에 사용할 데이터가 중요하다는 것을 느꼈습니다. 
 	- 이미지에 대한 학습과 특성 추출은 패턴을 기반으로 학습이 되기 때문에, 뚜렷하고 구분되는 패턴이나 특징이 없는 이미지를 넣어 학습을 하면 성능이 좋지 않다는 것을 확인했습니다.
 	- 빈도수가 너무 적은 단어까지 포함시켜 학습을 하게 되면 시간이 많이 소요될 뿐만 아니라 정확도가 낮아질 수 있습니다. 하지만 학습시킬 단어 토큰 종류도 충분히 있어야 제대로 학습이 될 수 있습니다. 따라서, 모델링시 단어 토큰 수/규모에 따라 적당한 threshold를 지정하는 것이 중요 합니다.
-- 메모리 가용 범위 내에서 batch size는 크게 잡는 것이 좋습니다.
+- 메모리 가용 범위 내에서 batch size를 크게 잡는 것이 안정적이고, 좋은 성능으로 학습 할 수 있습니다.
 - 모델 학습이 빨리 되기 때문에, cross validation 등 과적합을 줄이기 위한 조치가 필요합니다.
 - 캡션 텍스트 처리와 토큰화는 어절이나 의미형태소 단위로만 처리하는 것보다 의미형태소와 기능형태소를 포함하는 것이 더 성능이 좋습니다.
 
