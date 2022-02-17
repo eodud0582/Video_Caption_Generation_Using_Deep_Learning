@@ -123,8 +123,8 @@
 		- **다음 단어**: 전체 단어 수 크기의 one-hot 인코딩 된 다음 단어
 - 모델 학습을 위한 input 및 output 데이터는 data generator를 통해 생성됩니다.
 - Data generator를 통해 모델에 하나의 **이미지 특성(X1)과 text sequence(X2)가 input으로 주어지면 다음 단어(y)가 학습** 됩니다. 이 생성된 **다음 단어는 text sequence(X2)에 포함되고 해당 이미지 특성(X1)과 함께 다시 input으로 주어져 그 다음 단어(y)에 대한 학습**이 이루어집니다. 이것이 모델이 훈련되는 방법입니다.  
-- 예를 들어, 하나의 이미지 그리고 하나의 문장 "two boys are playing baseball in the ground"에 대해 아래와 같이 처리되고 학습됩니다.
-<br>
+- 예를 들어, "two boys are playing baseball in the ground"라는 문장이 있다면, 이 하나의 문장과 해당 이미지에 대해 아래와 같이 처리되고 학습됩니다.
+
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154433865-80921d06-15bc-420a-a487-169ceae72132.png" width="500"></div>
 <div align=center> Input Data Structure </div>
 
@@ -188,14 +188,12 @@
 #### :chart_with_upwards_trend: 모델 BLEU 평가 결과
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154012751-6d4e564f-0b2f-404f-9408-e8a6084a65bd.png" width="500"></div>
-<br>
 
 - 모델링은 아래의 요소들을 변경해가며 진행했습니다.
 	- 데이터셋, 임베딩 방법, 텍스트 전처리 및 토큰화 방법, 단어 최소 빈도수 threshold, 에포크(epoch), 배치사이즈(batch size), 학습률(learning rate), 교차검증(cross validation)
 - 이미지 특성 추출은 모든 과정에서 동일하게 pre-trained model인 InceptionV3를 사용했습니다.
 - 실험을 거치면서 BLEU 스코어가 지속적으로 증가했습니다. 결론적으로 마지막 모델이 가장 높은 성능을 보였습니다.
 
-<br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154014256-c2a3248b-f0e9-41cb-a0ee-bd19170c3b8b.png" width="500"></div>
 
 ### :one: Trial 1
