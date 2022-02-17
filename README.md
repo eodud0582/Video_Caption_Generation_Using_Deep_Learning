@@ -400,7 +400,7 @@
 - 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 더 나은 성능을 보여줬습니다.
 - 또한, 기능형태소를 포함하였더니 생성된 캡션도 문장 처럼 더욱 자연스러워 졌습니다.
 
-<div align=center><img src="https://user-images.githubusercontent.com/38115693/154392394-5ee07c5f-3a78-4c24-b7da-3b7d2481c7b5.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154392401-229e16d7-a72f-427a-95c1-e6f72781df92.png" height="200"></div>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154392394-5ee07c5f-3a78-4c24-b7da-3b7d2481c7b5.png" height="190"><img src="https://user-images.githubusercontent.com/38115693/154392401-229e16d7-a72f-427a-95c1-e6f72781df92.png" height="190"></div>
 <div align=center> AI Hub 멀티모달 데이터셋 이미지 테스트 캡션 </div>
 
 ### :six: Trial 6
