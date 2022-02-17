@@ -176,6 +176,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 #### :chart_with_upwards_trend: 모델 BLEU 평가 결과
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154012751-6d4e564f-0b2f-404f-9408-e8a6084a65bd.png" width="500"></div>
+<br>
 
 - 모델링은 아래의 요소들을 변경해가며 진행했습니다.
 	- 데이터셋, 임베딩 방법, 텍스트 전처리 및 토큰화 방법, 단어 최소 빈도수 threshold, 에포크(epoch), 배치사이즈(batch size), 학습률(learning rate), 교차검증(cross validation)
@@ -217,6 +218,8 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - BLEU 점수는 1에 가까울 수록 좋은 점수인데, 평가 결과 낮은 점수를 보입니다. 
 - 모든 테스트 이미지들에 대해 동일한 동일한 캡션을 출력했습니다.
 
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154398344-ad5e48a5-bac1-4d84-96f5-b3e0ad9a3347.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154398349-b2a8dacd-9593-4bfd-8236-759677ed314f.png" height="200"></div>
+
 #### (2) Trial 1-2
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
@@ -241,6 +244,8 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 **실험 결과**
 
 - 여전히 모든 테스트 이미지들에 대해 동일한 동일한 캡션을 출력했습니다.
+
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154398380-4b793986-92bc-4282-af50-68c597970610.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154398372-7dbf4205-9fde-44a7-95fb-eb788f1f2816.png" height="200"></div>
 
 ### :two: Trial 2
 
@@ -275,6 +280,10 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 	- BLEU-1(+13점), BLEU-2(+4점), BLEU-3(+3점), BLEU-4(+4점)
 - 정성적으로도 모든 테스트 이미지들에 대해 다르면서도, 개선된 캡션 생성 성능을 보였습니다. 
 
+![image](https://user-images.githubusercontent.com/38115693/154394915-b5347907-e1b7-4729-b731-bad77b00ac19.png)
+
+<div align=center><img src="" height="200"><img src="" height="200"></div>
+
 ### :three: Trial 3
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
@@ -303,6 +312,8 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - Trial 2와 비교하여 BLEU 점수가 더 증가했습니다.
 	- BLEU-1(+5점), BLEU-2(+5점), BLEU-3(+4점), BLEU-4(+2점)
 - MSCOCO 이미지 캡셔닝에 대한 사람의 BLEU 점수는 BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점이라고 합니다. Trial 3의 BLEU-1 점수 66점은 사람의 BLEU-1 점수인 67점과 비슷한 점수를 보였습니다. BLEU-2, 3, 4 또한 비교할만한 성능을 보여줬다고 생각합니다.
+
+<div align=center><img src="" height="200"><img src="" height="200"></div>
 
 ### :four: Trial 4
 
@@ -335,12 +346,14 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 	- BLEU-1(+1점), BLEU-2(+2점), BLEU-3(+2점), BLEU-4(+1점)
 - 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 매우 근접한 성능을 보여줬습니다.
 
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154397942-f539a7a5-c627-459d-9196-ff3f6edc0d99.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154398961-5c867184-399e-4522-9f56-64c68b9ec91b.png" height="200"></div>
+
 ### :five: Trial 5
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
 
 **실험 배경**
-- Trial 4와 동일하게 epoch 20까지는 batch size 16, learning rate 0.001로 학습하고, epoch 21~30까지는 batch size 32, learning rate 0.0001로 학습 했습니다.
+- 가장 성능이 좋았던 Trial 4와 동일하게 epoch 20까지는 batch size 16, learning rate 0.001로 학습하고, epoch 21~30까지는 batch size 32, learning rate 0.0001로 학습 했습니다.
 - 하지만 이번 실험에선 캡션 데이터를 **의미형태소 뿐만 아니라 기능형태소(조사, 어미 등 문법적관계를 표현하는 형태소)를 포함하여 처리**하였습니다. 기능형태소는 제한적인 어휘를 가지기 때문에 예측 성능이 높게 나타날 수 있기 때문입니다.
 - 그리고 기능형태소를 포함하였기에 단어 토큰 수가 증가하였는데, 학습할 토큰 단어들의 종류가 충분히 있어야 학습에도 도움이 될 것 같아 학습할 데이터에 맞춰 최소 빈도수 threshold는 4로 변경했습니다.
 
@@ -365,7 +378,9 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 - Trial 4와 비교하여 BLEU 점수가 더 향상되었습니다.
 	- BLEU-1은 거의 동일했고, BLEU-2(+4점), BLEU-3(+6점), BLEU-4(+7점) 점수 모두 증가했습니다.
 - 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 더 나은 성능을 보여줬습니다.
-- 또한, 기능형태소를 포함하였더니 생성된 캡션도 문장 형태로 더욱 자연스러워 졌습니다.
+- 또한, 기능형태소를 포함하였더니 생성된 캡션도 문장 처럼 더욱 자연스러워 졌습니다.
+
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154392394-5ee07c5f-3a78-4c24-b7da-3b7d2481c7b5.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154392401-229e16d7-a72f-427a-95c1-e6f72781df92.png" height="200"></div>
 
 ### :six: Trial 6
 
@@ -395,7 +410,10 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 
 - Trial 5와 비교하여 BLEU 점수가 미미하지만 상승했습니다.
 	- BLEU-1 점수가 약 +1점 가까이 증가하였고, BLEU-2, 3, 4는 거의 동일합니다.
-- 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 더 나은 성능을 보여줬습니다.
+- Trial 5와 마찬가지로 Trial 6도 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 더 나은 성능을 보여줬습니다.
+- 결론적으로, 마지막 모델링 Trial 6에서 가장 좋은 성능을 보여주었습니다.
+
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154394263-da7c4bef-eecb-41c5-a1e5-4e32c7710c90.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154393589-b792c263-bbe0-44d6-a214-5bcf01680eea.png" height="200"></div>
 
 ---
 ## :game_die: 활용방안
