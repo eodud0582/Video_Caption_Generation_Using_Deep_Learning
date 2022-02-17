@@ -172,7 +172,7 @@
 ---
 ## :wrench: 모델링 세부 과정 및 평가
 
-**모델 BLEU 평가 결과**
+#### :chart_with_upwards_trend: 모델 BLEU 평가 결과
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154014256-c2a3248b-f0e9-41cb-a0ee-bd19170c3b8b.png" width="500"></div>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154012751-6d4e564f-0b2f-404f-9408-e8a6084a65bd.png" width="500"></div>
@@ -428,7 +428,7 @@
 - 더 많은 데이터를 사용하여 학습한다면, 캡션 예측/생성 성능이 더 좋아질 것으로 생각되기 때문에, 데이터를 더 확보하여 시도
 	- AI허브 MSCOCO와 멀티모달 두 데이터를 합쳐 모델 학습을 진행해 보는 것도 고려
 - AI허브 멀티모달 영상 데이터에 대해 pre-trained CNN 모델로 transfer learning시 fine tuning을 더 시도하거나(trainable layer을 증가?), 자체 CNN 모델을 설계하여 처음부터 학습하여 특성 추출
-- 모델 아키텍쳐를 변경 (e.g. Bidirectional RNNs/LSTMs 사용, Attention 메커니즘 기법 사용, Injecting methodology 사용)
+- 모델 아키텍쳐를 변경 (e.g. Bidirectional RNNs/LSTMs 사용, Attention 메커니즘 기법 사용 사용)
 - more 하이퍼파라미터 튜닝 (e.g. learning rate, batch size, embedding dimension 300, number of layers, number of units, dropout rate, batch normalization 등 조정)
 - 영상을 표현하는 시각 특징 외에, 정적 그리고 동적 의미 특징들도 이용
 
