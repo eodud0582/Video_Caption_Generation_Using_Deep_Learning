@@ -114,6 +114,7 @@
 (input 데이터 형태)
 
 (모델의 학습 방법)
+train the model using Keras. As mentioned in the approach, the idea is to train the sequence of words through the LSTM layers so it can derive the best possible word (actually a number assigned to a word) that would follow the sequence.
 
 ---
 ## :cool: 캡션 생성
@@ -156,7 +157,7 @@
 - 측정 기준은 n-gram에 기반하는데, **예측 문장과 정답 문장의 n-gram들이 서로 얼마나 겹치는지 비교하여 정확도를 측정**하기 때문에 이미지 캡션 평가에서도 보편적으로 사용됩니다.
 	- 점수를 매길 최대 길이를 n-gram 길이라고 할 때, n-gram이라고 하는 연속된 n개의 단어를 기준으로 실제 캡션(ground truth)과 얼마나 공통적인 단어가 나왔는지/겹치는지를 판단해서 BLEU 점수를 계산합니다.
 	- 보통 1~4의 크기의 n-gram을 측정 지표로 사용합니다.
-- 점수는 0.0~1.0 사이에서 나타내는데, **1.0에 가까울 수록, 높을수록 좋은 점수를 의미**합니다.
+- 점수는 0.0~1.0 사이에서 나타내는데, **1.0에 가까울 수록, 높을수록 좋은 점수이며 뛰어난 캡셔닝 성능을 의미**합니다.
 
 ---
 ## :musical_keyboard: 모델링 과정
@@ -174,14 +175,15 @@
 
 #### :chart_with_upwards_trend: 모델 BLEU 평가 결과
 
-<div align=center><img src="https://user-images.githubusercontent.com/38115693/154014256-c2a3248b-f0e9-41cb-a0ee-bd19170c3b8b.png" width="500"></div>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154012751-6d4e564f-0b2f-404f-9408-e8a6084a65bd.png" width="500"></div>
-<br>
 
 - 모델링은 아래의 요소들을 변경해가며 진행했습니다.
 	- 데이터셋, 임베딩 방법, 텍스트 전처리 및 토큰화 방법, 단어 최소 빈도수 threshold, 에포크(epoch), 배치사이즈(batch size), 학습률(learning rate), 교차검증(cross validation)
 - 이미지 특성 추출은 모든 과정에서 동일하게 pre-trained model인 InceptionV3를 사용했습니다.
-- 실험을 거치면서 BLEU 스코어가 지속적으로 증가했습니다. 최종적으로 마지막 모델이 가장 높은 성능을 보였습니다.
+- 실험을 거치면서 BLEU 스코어가 지속적으로 증가했습니다. 결론적으로 마지막 모델이 가장 높은 성능을 보였습니다.
+
+<br>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154014256-c2a3248b-f0e9-41cb-a0ee-bd19170c3b8b.png" width="500"></div>
 
 ### :one: Trial 1
 
