@@ -122,7 +122,7 @@
 	- **Output**
 		- **다음 단어**: 전체 단어 수 크기의 one-hot 인코딩 된 다음 단어
 - 모델 학습을 위한 input 및 output 데이터는 data generator를 통해 생성됩니다.
-- Data generator를 통해 모델에 하나의 이미지 특성(X1)과 text sequence(X2)가 input으로 주어지면 다음 단어(y)가 학습 됩니다. 이 생성된 다음 단어는 text sequence(X2)에 포함되고 해당 이미지 특성(X1)과 함께 다시 input으로 주어져 그 다음 단어(y)에 대한 학습이 이루어집니다. 이것이 모델이 훈련되는 방법입니다.  
+- Data generator를 통해 모델에 하나의 **이미지 특성(X1)과 text sequence(X2)가 input으로 주어지면 다음 단어(y)가 학습** 됩니다. 이 생성된 **다음 단어는 text sequence(X2)에 포함되고 해당 이미지 특성(X1)과 함께 다시 input으로 주어져 그 다음 단어(y)에 대한 학습**이 이루어집니다. 이것이 모델이 훈련되는 방법입니다.  
 - 예를 들어, 하나의 이미지 그리고 하나의 문장 "two boys are playing baseball in the ground"에 대해 아래와 같이 처리되고 학습됩니다.
 <br>
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154433865-80921d06-15bc-420a-a487-169ceae72132.png" width="500"></div>
@@ -409,8 +409,8 @@
 <div align=center> Model Architecture of the Trial </div>
 
 **실험 배경**
-- 캡셔닝 성능이 많이 개선되었지만, 일부 이미지에 대해 비슷한 캡션을 출력하는 오류를 확인하여, 이에 대해 과적합(overfitting) 때문이 아닐까 생각했습니다.
-- Trial 5와 동일한 설정에서 cross validation을 추가하여 학습하면서 overfitting에 대한 모니터링을 진행했습니다. 그리고 validation loss가 더 이상 낮아지지 않는 지점의 모델을 찾았습니다.
+- 캡셔닝 성능이 많이 개선되었지만, 일부 사람만 등장하는 이미지에 대해 비슷한 캡션을 출력하는 오류를 확인하여, 이에 대해 혹시 **과적합(overfitting)으로 인한 문제**가 아닐까 생각했습니다.
+- Trial 5와 동일한 설정에서 **cross validation을 추가하여 학습하면서 overfitting에 대한 모니터링을 진행**했습니다. 그리고 validation loss가 더 이상 낮아지지 않는 지점의 모델을 찾았습니다.
 
 **실험 내용**
 
