@@ -278,11 +278,9 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 
 - Trial 1과 비교하여 BLEU 점수가 크게 증가했습니다.
 	- BLEU-1(+13점), BLEU-2(+4점), BLEU-3(+3점), BLEU-4(+4점)
-- 정성적으로도 모든 테스트 이미지들에 대해 다르면서도, 개선된 캡션 생성 성능을 보였습니다. 
+- 그리고 테스트 이미지들에 대해 다 다른 캡션을 출력하였고, 개선된 캡션 생성 성능을 보였습니다.. 
 
-![image](https://user-images.githubusercontent.com/38115693/154394915-b5347907-e1b7-4729-b731-bad77b00ac19.png)
-
-<div align=center><img src="" height="200"><img src="" height="200"></div>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154415429-14e8cc12-aaed-40d2-a4d4-88e3d60abb75.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154415302-92400f1e-b032-4479-b967-77dca3aad27b.png" height="200"></div>
 
 ### :three: Trial 3
 
@@ -313,7 +311,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 	- BLEU-1(+5점), BLEU-2(+5점), BLEU-3(+4점), BLEU-4(+2점)
 - MSCOCO 이미지 캡셔닝에 대한 사람의 BLEU 점수는 BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점이라고 합니다. Trial 3의 BLEU-1 점수 66점은 사람의 BLEU-1 점수인 67점과 비슷한 점수를 보였습니다. BLEU-2, 3, 4 또한 비교할만한 성능을 보여줬다고 생각합니다.
 
-<div align=center><img src="" height="200"><img src="" height="200"></div>
+<div align=center><img src="https://user-images.githubusercontent.com/38115693/154415595-c6fcb891-260e-4eaa-9f89-836adce581fc.png" height="200"><img src="https://user-images.githubusercontent.com/38115693/154415646-5f3f45bc-71b4-4c4c-b201-b837a83d4ac9.png" height="200"></div>
 
 ### :four: Trial 4
 
