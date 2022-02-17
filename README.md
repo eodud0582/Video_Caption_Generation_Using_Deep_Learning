@@ -69,12 +69,16 @@
 <div align=center> Video Captioning Model </div>
 
 **동영상 캡셔닝 알고리즘**
-- 입력받은 동영상을 여러 **프레임**으로 나누고, **이미지 캡션 생성 모델**을 통해 각 프레임 이미지에 대한 캡션을 생성합니다.
-- 각 프레임 이미지에 대해 생성된 캡션을 해당 프레임 이미지에 출력하고, 프레임 이미지들을 **다시 동영상으로 변환**합니다.
+- OpenCV를 통해 입력받은 동영상을 여러 **프레임**으로 나누고, **이미지 캡셔닝 모델**을 통해 각 프레임 이미지에 대한 캡션을 생성합니다.
+- 각 프레임 이미지에 대해 생성된 캡션을 해당 프레임 이미지에 출력합니다. OpenCV는 한글 출력이 안 되기 때문에, Pillow 모듈을 추가적으로 사용했습니다.
+- 캡션이 생성된 프레임 이미지들을 OpenCV를 통해 **다시 동영상으로 변환**합니다.
 
 **이미지 유사도 분석**
 - 동영상의 캡션이 시시각각 변하는 구간들이 있어 캡션을 보는 것에 불편함이 있었습니다. 이에 대해, **이미지 유사도 분석을 통해 비슷한 프레임/장면에서는 동일한 캡션을 출력**하게 만들어 동영상 속 출력된 캡션이 부드럽게 전환되고, 보기 편하게 만들었으며, 캡셔닝 처리에 걸리는 시간도 단축시켰습니다.
 - 이미지 유사도 측정은 **MSE**(Mean Squared Error)와 **SSIM**(Structured Similarity Image Matching)을 사용하였으며, 최종적으로 모델에는 SSIM을 적용하였습니다.
+
+**출력된 캡션 처리**
+- KoNLPy의 Kkma(꼬꼬마) 형태소 분석기를 활용하여 생성된 캡션들이 제대로 된 문장 형태(어절 단위로 구분 된 문장)처럼 출력되도록 처리했습니다.
 
 ### :camera: 이미지 캡셔닝 모델
 
@@ -462,29 +466,41 @@
 ## :warning: 결론 및 향후 과제
 
 ### 결론
-- 모델링 결과, 사람의 캡션 BLEU 점수보다 더 높은 점수를 나타냈습니다.
-- 모델 학습에 사용할 데이터가 중요하다는 것을 느꼈습니다. 
+1. 모델링 결과, 사람의 캡션 BLEU 점수보다 더 높은 점수를 나타냈습니다.
+2. 모델 학습에 사용할 데이터가 중요하다는 것을 느꼈습니다. 
 	- 이미지에 대한 학습과 특성 추출은 패턴을 기반으로 학습이 되기 때문에, 뚜렷하고 구분되는 패턴이나 특징이 없는 이미지를 넣어 학습을 하면 성능이 좋지 않다는 것을 확인했습니다.
 	- 빈도수가 너무 적은 단어까지 포함시켜 학습을 하게 되면 시간이 많이 소요될 뿐만 아니라 정확도가 낮아질 수 있습니다. 하지만 학습시킬 단어 토큰 종류도 충분히 있어야 제대로 학습이 될 수 있습니다. 따라서, 모델링시 단어 토큰 수/규모에 따라 적당한 threshold를 지정하는 것이 중요 합니다.
-- 메모리 가용 범위 내에서 batch size를 크게 잡는 것이 안정적이고, 좋은 성능으로 학습 할 수 있습니다.
-- 모델 학습이 빨리 되기 때문에, cross validation 등 과적합을 줄이기 위한 조치가 필요합니다.
-- 캡션 텍스트 처리와 토큰화는 어절이나 의미형태소 단위로만 처리하는 것보다 의미형태소와 기능형태소를 포함하는 것이 더 성능이 좋습니다.
+3. 메모리 가용 범위 내에서 batch size를 크게 잡는 것이 안정적이고, 좋은 성능으로 학습 할 수 있습니다.
+4. 모델 학습이 빨리 되기 때문에, cross validation 등 과적합을 줄이기 위한 조치가 필요합니다.
+5. 캡션 텍스트 처리와 토큰화는 어절이나 의미형태소 단위로만 처리하는 것보다 의미형태소와 기능형태소를 포함하는 것이 더 성능이 좋습니다.
 
 ### 향후 과제
 
 **모델의 캡션 예측/생성 성능 향상을 위한 시도**
-- 더 많은 데이터를 사용하여 학습한다면, 캡션 예측/생성 성능이 더 좋아질 것으로 생각되기 때문에, 데이터를 더 확보하여 시도
-	- AI허브 MSCOCO와 멀티모달 두 데이터를 합쳐 모델 학습을 진행해 보는 것도 고려
-- AI허브 멀티모달 영상 데이터에 대해 pre-trained CNN 모델로 transfer learning시 fine tuning을 더 시도하거나(trainable layer을 증가?), 자체 CNN 모델을 설계하여 처음부터 학습하여 특성 추출
-- 모델 아키텍쳐를 변경 (e.g. Bidirectional RNNs/LSTMs 사용, Attention 메커니즘 기법 사용 사용)
-- more 하이퍼파라미터 튜닝 (e.g. learning rate, batch size, embedding dimension 300, number of layers, number of units, dropout rate, batch normalization 등 조정)
-- 영상을 표현하는 시각 특징 외에, 정적 그리고 동적 의미 특징들도 이용
+1. 더 많은 데이터를 사용하여 학습한다면 캡션 예측/생성 성능이 더 좋아질 것이기 때문에
+	- 새로운 데이터를 더 확보하거나,
+	- AI Hub MSCOCO와 멀티모달 두 데이터를 합쳐 모델 학습 진행
+3. 모델 아키텍쳐를 변경하여 모델링 (e.g. Bidirectional RNNs/LSTMs 사용, Attention 메커니즘 기법 사용 사용)
+4. Pre-trained CNN 모델로 transfer learning시 여러 fine tuning 시도 (e.g. trainable layer 증가)
+5. AI Hub 멀티모달 데이터셋을 이용한 모델링시 사전학습된 모델이 아닌 자체 CNN 모델을 설계하여 처음부터 학습하여 모델링
+6. 여러 하이퍼파라미터 튜닝 시도 (e.g. learning rate, batch size, embedding dimension 300, number of layers, number of units, dropout rate, batch normalization 등 조정)
+7. 영상을 표현하는 시각 특징 외에, 정적 그리고 동적 의미 특징들도 이용
 
 **출력된 캡션에 대한 추가적인 처리**
-- 문장이 완전하지 않은 형태로 출력 되는 경우가 있습니다. 예를 들어, "...에 서있다"가 맞는 형태이지만, "...에서 있다"로 출력이 되는 경우입니다. 더 고도화한 문장 생성 및 출력을 위해 형태소 분석이나 관련 기능을 조사하여 적용이 필요합니다.
+1. 문장이 완전하지 않은 형태로 출력 되는 경우가 있습니다. 예를 들어, "...에 서있다"가 맞는 형태이지만, "...에서 있다"로 출력이 되는 경우입니다. 더 고도화한 문장 생성 및 출력을 위해 형태소 분석이나 관련 기능을 조사하여 적용이 필요합니다.
 
 ---
-## :books: 참고 자료
+## :books: 참조 문헌
 
-Revising Small Batch Training for Deep Neural Networks, Masters and Luschi, 2018
-
+- Masters, D., & Luschi, C. (2018). Revisiting small batch training for deep neural networks. arXiv preprint arXiv:1804.07612.
+- Smith, S. L., Kindermans, P. J., Ying, C., & Le, Q. V. (2017). Don't decay the learning rate, increase the batch size. arXiv preprint arXiv:1711.00489.
+- Kandel, I., & Castelli, M. (2020). The effect of batch size on the generalizability of the convolutional neural networks on a histopathology dataset. ICT Express, 6(4), 312–315. https://doi.org/10.1016/j.icte.2020.04.010
+- Tanti, M., Gatt, A., & Camilleri, K. P. (2017). What is the role of recurrent neural networks (rnns) in an image caption generator?. arXiv preprint arXiv:1708.02043.
+- Tanti, M., Gatt, A., & Camilleri, K. P. (2018). Where to put the image in an image caption generator. Natural Language Engineering, 24(3), 467-489.
+- Mao, J., Xu, W., Yang, Y., Wang, J., Huang, Z., & Yuille, A. (2014). Deep captioning with multimodal recurrent neural networks (m-rnn). arXiv preprint arXiv:1412.6632.
+- Park, Seong-Jae & Cha, Jeong-Won. (2017). Generate Korean image captions using LSTM. Proceedings of the Korean Society for Language and Information Conference, (), 82-84.
+- Lamba, H. (2019, February 17). Image Captioning with Keras. Medium. https://towardsdatascience.com/image-captioning-with-keras-teaching-computers-to-describe-pictures-c88a46a311b8
+- Brownlee, J. (2020, December 22). How to Develop a Deep Learning Photo Caption Generator from Scratch. Machine Learning Mastery. https://machinelearningmastery.com/develop-a-deep-learning-caption-generation-model-in-python/
+- Data-Stats. (n.d.). Image-Captioning-using-Keras-and-Tensorflow. GitHub. https://github.com/data-stats/Image-Captioning-using-Keras-and-Tensorflow
+- Tang. (n.d.). Image Caption using Neural Networks. GitHub. https://xiangyutang2.github.io/image-captioning/
+- Captioning Leaderboard. (n.d.). COCO - Common Objects in Context. https://cocodataset.org/#captions-leaderboard
