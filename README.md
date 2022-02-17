@@ -191,7 +191,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 #### (1) Trial 1-1
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154084185-0a2ac9af-ee2a-4e6a-aaac-bc452bbc3f58.png" width="500"></div>
-<br>
+<div align=center> Model Architecture of the Trial </div>
 
 **실험 배경**
 - 동영상이라는건 결국 이미지들의 연속이며, 데이터 구조를 보면 동영상 안에는 여러 장면들이 있고 하나의 동일한 장면에 대해선 프레임 이미지들이 다 비슷합니다. 그리고 캡션도 동일합니다.
@@ -224,6 +224,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 #### (2) Trial 1-2
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
+<div align=center> Model Architecture of the Trial </div>
 
 **실험 배경**
 - 이전 실험에서 결과가 좋지 않았던 이유가 **각 고유한 캡션에 대해 이미지가 1개씩만 있어 이미지들이 가지는 특성을 제대로 학습을 하지 못한 것**이 아닐까 생각했습니다.
@@ -252,6 +253,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 ### :two: Trial 2
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
+<div align=center> Model Architecture of the Trial </div>
 
 **실험 배경**
 - 이전 실험에서 학습한 모델이 모든 이미지들에 대해 동일한 캡션만 출력한 이유에 대해, 학습시킨 이미지들이 문제인 것이 아닐까 생각했습니다. 학습에 사용한 이미지들을 살펴보면 그저 사람 또는 사람 얼굴만 나오는 경우가 많았고, **특별한 패턴이나 특징이 없다**고 생각했습니다. 그래서 **InceptionV3 모델이 이미지들로부터 특별한, 구별되는 특성들을 잡아내지 못한 것**이 아닐까 생각했습니다.
@@ -288,6 +290,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 ### :three: Trial 3
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
+<div align=center> Model Architecture of the Trial </div>
 
 **실험 배경**
 - 이전 실험에서 성능이 좋아진 것을 확인했기 때문에, 이번에는 **batch size를 16으로 더 늘려서 진행**했습니다.
@@ -320,6 +323,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 ### :four: Trial 4
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154216032-135a0605-115b-4830-8dcb-6d67b4bac3fa.png" width="500"></div>
+<div align=center> Model Architecture of the Trial </div>
 
 **실험 배경**
 - 이번 실험에선 **epoch 20까지는 batch size 16**으로 학습하고, **epoch 21~30까지는 batch size 32로 높이되 learning rate을 0.001 --> 0.0001**로 낮췄습니다. Batch size가 크면 learning rate을 작게 줄이는 것이 학습 효과가 더 좋기 때문입니다.
@@ -354,6 +358,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 ### :five: Trial 5
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
+<div align=center> Model Architecture of the Trial </div>
 
 **실험 배경**
 - 가장 성능이 좋았던 Trial 4와 동일하게 epoch 20까지는 batch size 16, learning rate 0.001로 학습하고, epoch 21~30까지는 batch size 32, learning rate 0.0001로 학습 했습니다.
@@ -389,6 +394,7 @@ train the model using Keras. As mentioned in the approach, the idea is to train 
 ### :six: Trial 6
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154227765-6f24b55e-d507-4f0f-9a77-22819a94b14c.png" width="500"></div>
+<div align=center> Model Architecture of the Trial </div>
 
 **실험 배경**
 - 캡셔닝 성능이 많이 개선되었지만, 일부 이미지에 대해 비슷한 캡션을 출력하는 오류를 확인하여, 이에 대해 과적합(overfitting) 때문이 아닐까 생각했습니다.
