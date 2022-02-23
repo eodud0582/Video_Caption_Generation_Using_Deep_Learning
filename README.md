@@ -7,7 +7,7 @@
 ## :question: 프로젝트 목적
 
 ```
-# 프로젝트에 대한 자세한 overview는 첨부된 Project_Overview.md 파일을 참고 바랍니다.
+# 참고: 프로젝트에 대한 자세한 overview는 첨부된 Project_Overview.md 파일을 확인 바랍니다.
 ```
 
 - 캡셔닝(captioning)이란 이미지나 영상이 주어졌을 때, 해당 이미지나 영상에 대한 설명을 문장 형식으로 생성하는 기술입니다. 
@@ -31,6 +31,60 @@
 </div>
 
 ---
+## :computer: 동영상 캡션 생성 모델 사용 방법
+
+### 설치
+> 필요한 라이브러리/패키지의 원활하고 편리한 설치를 위해 Google Colab 사용을 권장합니다.
+
+#### 라이브러리
+
+- Tensorflow
+```
+pip install --upgrade tensorflow
+```
+- OpenCV
+```
+pip install opencv-python
+```
+- Pillow
+```
+pip install --upgrade pillow
+```
+- KoNLPy
+```
+pip install konlpy
+```
+- scikit-image
+```
+pip install -U scikit-image
+```
+
+#### 한글 폰트
+
+> 원하는 한글 폰트 .ttf 파일을 직접 다운로드 받아 사용해도 됩니다.
+
+```
+sudo apt-get install -y fonts-nanum
+sudo fc-cache -fv
+```
+
+### 다운로드
+- **caption_generation_model.h5** : 학습된 모델
+- **train_descriptions.pkl** : 정리된 train descriptions 데이터
+- **video_caption_generator.py** : 동영상 캡션 생성 실행 파일
+
+### 실행
+1. 필요한 라이브러리/패키지 설치
+2. 필요한 파일 다운로드
+3. video_caption_generator.py 파일에 캡션을 생성할 동영상 파일 정보(이름, 파일 형식) 및 경로 입력
+4. video_caption_generator.py 파일 실행
+
+---
+
+```
+# 참고: 프로젝트에 대한 자세한 overview는 첨부된 Project_Overview.md 파일을 확인 바랍니다.
+```
+
 ## :calendar: 프로젝트 기간
 
 ![image](https://user-images.githubusercontent.com/38115693/153365286-ecd7ed33-79d3-4bdf-90e8-9f39f92172b6.png)
