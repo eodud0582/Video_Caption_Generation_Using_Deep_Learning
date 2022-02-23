@@ -77,7 +77,17 @@ sudo fc-cache -fv
 1. 필요한 라이브러리/패키지 설치
 2. 필요한 파일 다운로드
 3. video_caption_generator.py 파일에 캡션을 생성할 동영상 파일 정보(이름, 파일 형식) 및 경로 입력
-4. video_caption_generator.py 파일 실행
+
+```
+# read video file
+video_name = 'your_video_file_name' # 동영상 파일 이름
+base_path = '/content/drive/MyDrive/Colab Notebooks' # 기본 경로 입력
+
+video_id = video_name + '.mp4' # .avi 등 읽어들일 동영상 파일 형식에 맞게 입력
+video_path = os.path.join(base_path, video_id) # 동영상 파일 경로
+```
+
+5. video_caption_generator.py 파일 실행
 
 ---
 
