@@ -7,7 +7,7 @@
 ## :question: 프로젝트 목적
 
 ```
-# 참고: 프로젝트에 대한 자세한 overview는 첨부된 Project_Overview.md 파일을 확인 바랍니다.
+# 참고: 프로젝트에 대한 자세한 overview는 첨부된 PROJECT_OVERVIEW.md 파일을 확인 바랍니다.
 ```
 
 - 캡셔닝(captioning)이란 이미지나 영상이 주어졌을 때, 해당 이미지나 영상에 대한 설명을 문장 형식으로 생성하는 기술입니다. 
@@ -92,7 +92,7 @@ video_path = os.path.join(base_path, video_id) # 동영상 파일 경로
 ---
 
 ```
-# 참고: 프로젝트에 대한 자세한 overview는 첨부된 Project_Overview.md 파일을 확인 바랍니다.
+# 참고: 프로젝트에 대한 자세한 overview는 첨부된 PROJECT_OVERVIEW.md 파일을 확인 바랍니다.
 ```
 
 ## :calendar: 프로젝트 기간
