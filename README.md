@@ -236,9 +236,8 @@ video_path = os.path.join(base_path, video_id) # 동영상 파일 경로
 <div align=center> BLEU Scores </div>
 <br>
 
-- 실험을 거치면서 BLEU 스코어가 지속적으로 증가했습니다.
-- Trial 5부터는 BLEU 1-4 모두에서 사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 더 나은 성능을 보여줬습니다.
-- 결론적으로 마지막 실험 모델이 가장 높은 성능을 보였습니다.
+- 실험을 거치면서 BLEU 스코어가 지속적으로 증가했으며, 마지막 실험 모델이 가장 높은 성능을 보였습니다.
+- Trial 5 모델부터는 BLEU 1, 2, 3, 4 모두에서 **사람의 BLEU 점수(BLEU-1 67점, BLEU-2 47점, BLEU-3 32점, BLEU-4 22점)와 비교하여 더 나은 성능**을 보여줬습니다.
 
 <div align=center><img src="https://user-images.githubusercontent.com/38115693/154014256-c2a3248b-f0e9-41cb-a0ee-bd19170c3b8b.png" width="500"></div>
 <div align=center> BLEU Scores Chart </div>
