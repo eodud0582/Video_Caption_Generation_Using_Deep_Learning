@@ -46,8 +46,8 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 - 추론에 필요한 정보/값 구하기 (wordtoidx, idxtoword, vocab_size, max_length)
 - 학습된 모델 다시 불러오기
 '''
+# ------------------------------------------
 # train descriptions 불러오기
-import pickle
 with open("train_descriptions.pkl", "rb") as f:
     train_descriptions = pickle.load(f)
 
@@ -90,6 +90,7 @@ print('vocab size:', vocab_size)
 max_length = max(len(d.split()) for d in all_train_captions)
 print('description max length: %d' % max_length)
 
+# ------------------------------------------
 # pre-trained Inception model 불러오기 및 학습
 encode_model = InceptionV3(weights='imagenet') #InceptionV3 사용
 encode_model = Model(encode_model.input, encode_model.layers[-2].output)
@@ -115,9 +116,9 @@ def encodeImage(img):
     x = np.reshape(x, OUTPUT_DIM) # reshape from (1, 2048) to (2048, ); np.reshape(x, x.shape[1])
     return x
 
+# ------------------------------------------
 # 학습된 모델 불러오기
-from tensorflow import keras
-model = keras.models.load_model('caption_generation_model.h5')
+model = tensorflow.keras.models.load_model('caption_generation_model.h5')
 
 # ==============================================================================
 # 필요한 함수들 생성
@@ -212,6 +213,7 @@ def compare_images(imageA, imageB):
 '''
 start_time = time.time()
 
+# ------------------------------------------
 # read video file
 video_name = 'your_video_file_name' # 동영상 파일 이름
 base_path = '/content/drive/MyDrive/Colab Notebooks' # 기본 경로 입력
@@ -220,6 +222,7 @@ video_id = video_name + '.mp4' # .avi 등 읽어들일 동영상 파일 형식�
 video_path = os.path.join(base_path, video_id) # 동영상 파일 경로
 cap = cv2.VideoCapture(video_path)
 
+# ------------------------------------------
 # video에서 frame image 추출
 print('extracting video frame images...')
 count = 0
@@ -235,6 +238,7 @@ cap.release()
 cv2.destroyAllWindows()
 print('total video frame images:', count)
 
+# ------------------------------------------
 # frame 이미지들 특성 추출
 print('extracting features from video frame images...')
 test_features = {}
@@ -248,6 +252,7 @@ for i in tqdm(range(len(image_dict))):
     test_features[image_id] = encodeImage(img)
 print('total extracted image features:', len(test_features))
 
+# ------------------------------------------
 # caption generation 및 video 생성
 print('generating captions...')
 kkma = Kkma()
@@ -338,6 +343,7 @@ for i in tqdm(range(len(image_dict))):
     # img_array에 append
     img_array.append(img)
 
+# ------------------------------------------
 # 동영상 writer 객체 생성
 print('creating captioned video...')
 captioned_video_name = 'captioned_' + video_name + '.avi' # 동영상 파일 이름 / 저장 경로
