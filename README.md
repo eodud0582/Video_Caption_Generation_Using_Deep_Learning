@@ -88,7 +88,7 @@ video_path = os.path.join(base_path, video_id) # 동영상 파일 경로
 ```
 
 5. video_caption_generator.py 파일 실행
-	- train_descriptions.pkl 파일과 caption_generation_model.h5 파일이 video_caption_generator.py와 같은 디렉토리/경로에 있다면 바로 실행
+	- train_descriptions.pkl과 caption_generation_model.h5이 video_caption_generator.py와 같은 디렉토리/경로에 있다면 바로 실행
 	- 다른 디렉토리/경로에 있다면 video_caption_generator.py에서 두 파일 경로 설정
 
 ---
