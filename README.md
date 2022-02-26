@@ -75,10 +75,9 @@ sudo fc-cache -fv
 
 ### 실행
 1. 필요한 라이브러리/패키지 설치
-2. 한글 폰트 .ttf 파일 다운로드
-3. 필요한 파일 다운로드
-4. video_caption_generator.py 파일에 캡션을 생성할 동영상 파일 정보(이름, 파일 형식) 및 경로 입력
-
+2. 한글 폰트 설치 or 원하는 한글 폰트 .ttf 파일 다운로드
+4. 필요한 파일 다운로드(caption_generation_model.h5, train_descriptions.pkl, video_caption_generator.py)
+5. video_caption_generator.py에 캡션을 생성할 동영상 파일 정보(이름, 파일 형식) 및 경로 입력
 ```
 # read video file
 video_name = 'your_video_file_name' # 동영상 파일 이름
@@ -87,10 +86,13 @@ base_path = '/content/drive/MyDrive/Colab Notebooks' # 기본 경로 입력
 video_id = video_name + '.mp4' # .avi 등 읽어들일 동영상 파일 형식에 맞게 입력
 video_path = os.path.join(base_path, video_id) # 동영상 파일 경로
 ```
-
-5. video_caption_generator.py 파일 실행
+6. video_caption_generator.py에 사용할 한글 폰트 .ttf 파일 경로 입력
+```
+font = ImageFont.truetype('./fonts/NanumGothic.ttf', fontsize) # 사용할 한글 폰트 및 글자 크기 지정
+```
+7. video_caption_generator.py 파일 실행
 	- train_descriptions.pkl과 caption_generation_model.h5이 video_caption_generator.py와 같은 디렉토리/경로에 있다면 바로 실행
-	- 다른 디렉토리/경로에 있다면 video_caption_generator.py에서 두 파일 경로 설정
+	- 다른 디렉토리/경로에 있다면 video_caption_generator.py에 두 파일 경로 입력 변경
 
 ---
 
