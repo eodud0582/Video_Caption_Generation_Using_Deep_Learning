@@ -75,8 +75,9 @@ sudo fc-cache -fv
 
 ### 실행
 1. 필요한 라이브러리/패키지 설치
-2. 필요한 파일 다운로드
-3. video_caption_generator.py 파일에 캡션을 생성할 동영상 파일 정보(이름, 파일 형식) 및 경로 입력
+2. 한글 폰트 .ttf 파일 다운로드
+3. 필요한 파일 다운로드
+4. video_caption_generator.py 파일에 캡션을 생성할 동영상 파일 정보(이름, 파일 형식) 및 경로 입력
 
 ```
 # read video file
